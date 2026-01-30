@@ -1,5 +1,4 @@
-
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -15,57 +14,46 @@
         }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: white; line-height: 1.6; overflow-x: hidden; }
         .container { width: 95%; max-width: 550px; margin: auto; padding: 20px; }
-        .card {
-            background: var(--card); border-radius: 24px; padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4); margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
-        .btn {
-            width: 100%; padding: 18px; border-radius: 14px; border: none;
-            font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s;
-            margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;
-            text-decoration: none; color: inherit;
-        }
+        .card { background: var(--card); border-radius: 24px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; text-align: center; }
+        .btn { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: inherit; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-whatsapp { background: var(--whatsapp); color: white; }
-        .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; text-align: center; }
+        .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; }
         .hidden { display: none; }
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .slider-container { margin: 40px 0; text-align: center; }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 10px; background: #334155; border-radius: 5px; }
-        input[type=range]::-webkit-slider-thumb {
-            height: 28px; width: 28px; border-radius: 50%; background: var(--accent);
-            cursor: pointer; -webkit-appearance: none; margin-top: -9px;
-            box-shadow: 0 0 15px rgba(0,193,255,0.4);
-        }
+        input[type=range]::-webkit-slider-thumb { height: 28px; width: 28px; border-radius: 50%; background: var(--accent); cursor: pointer; -webkit-appearance: none; margin-top: -9px; box-shadow: 0 0 15px rgba(0,193,255,0.4); }
         .val-display { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
         .tag { padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
         .fuego { background: var(--fuego); } .agua { background: var(--agua); } .tierra { background: var(--tierra); } .aire { background: var(--aire); color: #000; }
         #ai-loading { text-align: center; padding: 20px; font-weight: bold; color: var(--accent); }
-        .logo-img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; border: 2px solid var(--accent); }
+        .logo-img { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px; display: block; border: 2px solid var(--accent); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="screen-home" class="card" style="text-align:center;">
+    <div id="screen-home" class="card">
         <img src="logo.png" alt="MPM" class="logo-img" onerror="this.style.display='none'">
         <h1>Preemptive Movement</h1>
-        <p>Análisis de estado mediante Inteligencia Artificial Gemini Pro.</p>
-        <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR CONSULTA IA</button>
+        <p style="text-align:center">Decodificación de estados mediante IA Gemini Pro.</p>
+        <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR DIAGNÓSTICO</button>
     </div>
 
     <div id="screen-menu" class="hidden">
         <div class="card">
-            <h2>Módulos Disponibles</h2>
-            <div id="menu-list" style="display: grid; gap: 10px;"></div>
+            <h2>Módulos</h2>
+            <div id="menu-list" class="menu-grid"></div>
+            <button class="btn btn-outline" onclick="showScreen('screen-home')">Volver</button>
         </div>
     </div>
 
     <div id="screen-test" class="hidden">
         <div class="card">
-            <div id="test-progress" style="color:var(--accent); font-size: 0.8rem; margin-bottom: 10px;"></div>
+            <div id="test-progress" style="color:var(--accent); font-size: 0.8rem;"></div>
             <h3 id="question-text">-</h3>
             <div class="slider-container">
                 <input type="range" id="main-slider" min="1" max="10" step="1" oninput="updateUIValue()">
@@ -82,19 +70,13 @@
         <div class="card">
             <h1>Informe IA</h1>
             <canvas id="mpmChart"></canvas>
-            
-            <div id="ai-loading" class="hidden">
-                <div class="spinner"></div>
-                Procesando con Gemini IA...
-            </div>
-            
+            <div id="ai-loading" class="hidden">Analizando con IA...</div>
             <div id="text-results"></div>
-
             <div style="margin-top: 20px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
-                <input type="text" id="userName" placeholder="Tu nombre" style="width:100%; padding:12px; border-radius:8px; border:none; margin-bottom:10px;">
-                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">ENVIAR CONSULTA</button>
+                <input type="text" id="userName" placeholder="Tu nombre" style="width:100%; padding:12px; border-radius:8px; border:none; margin-bottom:10px; background:#0f172a; color:white;">
+                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">ENVIAR A CONSULTOR</button>
             </div>
-            <button class="btn btn-outline" onclick="location.reload()">NUEVA LECTURA</button>
+            <button class="btn btn-outline" onclick="location.reload()">REINICIAR</button>
         </div>
     </div>
 </div>
@@ -103,7 +85,20 @@
 const testsData = {
     colores: { n:"🎨 Colores", q:["Rojo","Azul","Verde","Amarillo","Negro","Blanco","Morado","Naranja","Rosa","Gris","Turquesa","Marrón","Dorado","Plateado","Beige","Fucsia"]},
     ciudades: { n:"🌆 Ciudades", q:["Tokio","París","Nueva York","Roma","Londres","Sídney","Ámsterdam","Seúl","Barcelona","Los Ángeles","Dubái","Berlín","Buenos Aires","Toronto","El Cairo","Madrid"]},
-    profesiones: { n:"💼 Profesiones", q:["Médico","Artista","Ingeniero","Abogado","Maestro","Programador","Empresario","Psicólogo","Chef","Policía","Arquitecto","Deportista","Científico","Actor","Piloto","Escritor"]}
+    autos: { n:"🚗 Automóviles", q:["Ferrari","Toyota","Mercedes","Audi","Tesla","Ford","BMW","Chevrolet","Lamborghini","Honda","Porsche","Hyundai","Range Rover","Volkswagen","Peugeot","Citroën"]},
+    alimentos: { n:"🍽 Alimentos", q:["Chocolate","Manzana","Café","Pan","Carne","Pasta","Arroz","Queso","Pollo","Miel","Nueces","Salmón","Fresas","Aguacate","Huevos","Yogur"]},
+    profesiones: { n:"💼 Profesiones", q:["Médico","Artista","Ingeniero","Abogado","Maestro","Programador","Empresario","Psicólogo","Chef","Policía","Arquitecto","Deportista","Científico","Actor","Piloto","Escritor"]},
+    animales: { n:"🦁 Animales", q:["León","Lobo","Águila","Delfín","Tigre","Serpiente","Perro","Gato","Caballo","Búho","Tiburón","Oso","Cuervo","Conejo","Toro","Halcón"]},
+    estaciones: { n:"🍁 Estaciones", q:["Primavera","Verano","Otoño","Invierno","Amanecer","Atardecer","Mediodía","Medianoche","Clima tropical","Clima ártico","Clima templado","Clima desértico","Ambiente húmedo","Ambiente seco","Zona montañosa","Zona costera"]},
+    instrumentos: { n:"🎵 Instrumentos", q:["Piano","Guitarra","Violín","Flauta","Batería","Saxofón","Arpa","Trompeta","Bajo","Acordeón","Ukelele","Timbal","DJ Mixer","Voz humana","Órgano","Cello"]},
+    paises: { n:"🌍 Países", q:["Japón","Estados Unidos","Francia","España","Alemania","Italia","México","Brasil","Argentina","Canadá","Australia","Egipto","India","China","Rusia","Grecia"]},
+    metales: { n:"🔩 Metales", q:["Oro","Plata","Bronce","Cobre","Hierro","Plomo","Titanio","Mercurio","Acero","Latón","Platino","Wolframio","Níquel","Aluminio","Cobalto","Iridio"]},
+    paisajes: { n:"🏞 Paisajes", q:["Mar","Bosque","Montaña","Desierto","Cascada","Pradera","Jungla","Cueva","Glaciar","Cañón","Volcán","Llanura","Isla","Tundra","Sabana","Arrecife"]},
+    arquitectura: { n:"🏛 Arquitectura", q:["Minimalista","Barroco","Gótico","Románico","Brutalista","Art Deco","Clásico","Futurista","Industrial","Neoclásico","Orgánico","Colonial","High-Tech","Renacentista","Moderno","Posmoderno"]},
+    sabores: { n:"🍯 Sabores", q:["Dulce","Ácido","Amargo","Salado","Umami","Picante","Agridulce","Herbal","Tostado","Fresco","Cremoso","Fermentado","Marino","Ahumado","Frutal","Especiado"]},
+    tecnologias: { n:"📲 Tecnologías", q:["IA","Robótica","Web3","Cripto","Medicina","Bioingeniería","Big Data","Nano","VR","Satélites","EVs","IoT","Cloud","Fusión","Drones","Quantum"]},
+    epocas: { n:"⌛ Épocas", q:["Grecia","Roma","Edad Media","Renacimiento","Ilustración","Rev Industrial","Años 20","Años 50","Años 80","Actualidad","Futuro Cercano","Futuro Lejano","Barroco","Romanticismo","Modernismo","Transhumanismo"]},
+    arquetipos: { n:"🔱 Arquetipos", q:["Dragón","Fénix","Unicornio","Kraken","Pegaso","Minotauro","Sirena","Grifo","Quimera","Anubis","Thor","Medusa","Zeus","Hades","Ra","Odín"]}
 };
 
 const tablaMPM = {
@@ -139,9 +134,8 @@ function loadQuestion() {
 }
 
 function updateUIValue() {
-    const val = document.getElementById('main-slider').value;
-    scores[currentIdx] = parseInt(val);
-    document.getElementById('display-value').innerText = val;
+    scores[currentIdx] = parseInt(document.getElementById('main-slider').value);
+    document.getElementById('display-value').innerText = scores[currentIdx];
 }
 
 function nextQ() {
@@ -154,60 +148,44 @@ function prevQ() { if(currentIdx > 0) { currentIdx--; loadQuestion(); } }
 async function processAIResults() {
     showScreen('screen-results');
     document.getElementById('ai-loading').classList.remove('hidden');
-    document.getElementById('text-results').innerHTML = "";
-
+    
     const getB = (s) => {
         const bits = scores.slice(s, s+4).map(v => v >= 5 ? "1" : "0").join("");
         const d = tablaMPM[bits] || [9, "aire", 0, "Estado Neutro"];
         return { id:d[0], elem:d[1], val:d[2], msg:d[3] };
     };
 
-    lastResult = {
-        b1: getB(0), b2: getB(4), b3: getB(8), b4: getB(12),
-        total: getB(0).val + getB(4).val + getB(8).val + getB(12).val
-    };
-
+    lastResult = { b1:getB(0), b2:getB(4), b3:getB(8), b4:getB(12), total:getB(0).val+getB(4).val+getB(8).val+getB(12).val };
     renderChart(scores);
 
     try {
         const response = await fetch('/.netlify/functions/analisis', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ resultados: lastResult, modulo: testsData[currentModule].n })
         });
         const data = await response.json();
-        
         document.getElementById('ai-loading').classList.add('hidden');
         document.getElementById('text-results').innerHTML = `
             <div style="border-left: 4px solid var(--accent); padding-left: 15px; margin-top:20px;">
                 <p><strong>SITUACIÓN:</strong> <span class="tag ${lastResult.b1.elem}">${lastResult.b1.elem}</span></p>
-                <p style="font-size: 1.1rem; color: #fff; line-height: 1.4;">${data.interpretacion}</p>
+                <p style="font-size: 1.1rem; color: #fff;">${data.interpretacion}</p>
             </div>
         `;
     } catch (e) {
-        document.getElementById('ai-loading').innerText = "Error al conectar con la IA. Mostrando análisis local...";
-        // ... fallback ...
+        document.getElementById('ai-loading').innerText = "Error de conexión. Revisa netlify.toml y la API Key.";
     }
 }
 
 function renderChart(sc) {
     const ctx = document.getElementById('mpmChart').getContext('2d');
-    const data = [
-        sc.slice(0,4).reduce((a,b)=>a+b)/4, sc.slice(4,8).reduce((a,b)=>a+b)/4,
-        sc.slice(8,12).reduce((a,b)=>a+b)/4, sc.slice(12,16).reduce((a,b)=>a+b)/4
-    ];
-    new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ['S', 'M', 'T', 'R'],
-            datasets: [{ data, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF' }]
-        },
-        options: { scales: { r: { min:0, max:10, ticks: { display:false } } }, plugins: { legend: { display:false } } }
-    });
+    const data = [sc.slice(0,4).reduce((a,b)=>a+b)/4, sc.slice(4,8).reduce((a,b)=>a+b)/4, sc.slice(8,12).reduce((a,b)=>a+b)/4, sc.slice(12,16).reduce((a,b)=>a+b)/4];
+    new Chart(ctx, { type: 'radar', data: { labels: ['S', 'M', 'T', 'R'], datasets: [{ data, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF' }] }, options: { scales: { r: { min:0, max:10, ticks: { display:false } } }, plugins: { legend: { display:false } } } });
 }
 
 function sendWhatsApp() {
     const name = document.getElementById('userName').value || "Cliente";
-    const text = `Hola, soy ${name}. He completado mi diagnóstico MPM con IA. Resultados: S:${lastResult.b1.id}, M:${lastResult.b2.id}, T:${lastResult.b3.id}, R:${lastResult.b4.id}.`;
+    const text = `Hola, soy ${name}. Diagnóstico MPM finalizado. Resultados: S:${lastResult.b1.id}, M:${lastResult.b2.id}, T:${lastResult.b3.id}, R:${lastResult.b4.id}.`;
     window.open(`https://wa.me/34672680535?text=${encodeURIComponent(text)}`);
 }
 
