@@ -19,7 +19,8 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.4); margin-bottom: 20px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        h1 { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
+        h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin-bottom: 20px; color: var(--accent); }
         .btn {
             width: 100%; padding: 18px; border-radius: 14px; border: none;
             font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s;
@@ -29,6 +30,7 @@
         .btn-primary { background: var(--primary); color: white; }
         .btn-whatsapp { background: var(--whatsapp); color: white; }
         .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; text-align: left !important; }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); color: white; }
         .hidden { display: none; }
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .slider-container { margin: 40px 0; text-align: center; }
@@ -57,17 +59,19 @@
 <div class="container">
     <div id="screen-home" class="card">
         <div style="text-align:center;">
-            <img src="logo.png" alt="MPM Logo" class="logo-img">
+            <img src="logo.png" alt="MPM Logo" class="logo-img" onerror="this.style.display='none'">
             <h1>Manual Preemptive Movement</h1>
-            <p>Anticípate al movimiento. Decodifica tu estado y optimiza tu estrategia.</p>
+            <p>Anticípate al movimiento. Decodifica tu estado y optimiza tu estrategia con análisis avanzado.</p>
             <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR DIAGNÓSTICO</button>
         </div>
     </div>
 
     <div id="screen-menu" class="hidden">
-        <h2>Selecciona un Módulo</h2>
-        <div id="menu-list" class="menu-grid"></div>
-        <button class="btn btn-outline" style="margin-top:20px; text-align:center !important;" onclick="showScreen('screen-home')">Volver</button>
+        <div class="card">
+            <h2>Selecciona un Módulo</h2>
+            <div id="menu-list" class="menu-grid"></div>
+            <button class="btn btn-outline" style="margin-top:20px; text-align:center !important;" onclick="showScreen('screen-home')">Volver</button>
+        </div>
     </div>
 
     <div id="screen-test" class="hidden">
@@ -93,7 +97,7 @@
             
             <div style="background: rgba(0,193,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
                 <h3 style="margin-top:0;">Análisis Profundo</h3>
-                <p style="font-size:0.9rem;">Solicita tu sesión de consultoría personalizada.</p>
+                <p style="font-size:0.9rem;">Solicita tu sesión de consultoría personalizada enviando este reporte.</p>
                 <input type="text" id="userName" placeholder="Escribe tu nombre">
                 <button class="btn btn-whatsapp" onclick="sendWhatsApp()">ENVIAR A WHATSAPP</button>
                 <button class="btn btn-outline" style="text-align:center !important;" onclick="sendEmail()">ENVIAR POR EMAIL</button>
@@ -181,25 +185,20 @@ function prevQ() { if(currentIdx > 0) { currentIdx--; loadQuestion(); } }
 function processResults() {
     const getB = (s) => {
         const bits = scores.slice(s, s+4).map(v => v >= 5 ? "1" : "0").join("");
-        const d = tablaMPM[bits];
+        const d = tablaMPM[bits] || [0, "aire", 0, "No definido"];
         return { id:d[0], elem:d[1], val:d[2], msg:d[3] };
     };
 
-    const b1 = getB(0);  // Situación
-    const b2 = getB(4);  // Movimiento
-    const b3 = getB(8);  // Transformación
-    const b4 = getB(12); // Resultado
-    
+    const b1 = getB(0); const b2 = getB(4); const b3 = getB(8); const b4 = getB(12);
     const total = b1.val + b2.val + b3.val + b4.val;
 
-    // LÓGICA DE INTERPRETACIÓN AVANZADA (Simulación de IA)
     let interpretacion = "";
     if (total > 5) {
-        interpretacion = `Tu estado actual indica una **vibración expansiva**. La transición desde tu situación (${b1.elem}) hacia el resultado (${b4.elem}) sugiere que estás en un momento de máxima eficiencia.`;
+        interpretacion = `Tu estado actual indica una **vibración expansiva**. La transición desde tu situación (${b1.elem}) hacia el resultado (${b4.elem}) sugiere que estás en un momento de máxima eficiencia estratégica.`;
     } else if (total > 0) {
-        interpretacion = `Análisis equilibrado. Tu movimiento está alineado, pero la transición hacia ${b4.elem} requiere una atención consciente para no perder el impulso inicial.`;
+        interpretacion = `Análisis equilibrado. Tu movimiento está alineado, pero la transición final requiere una atención consciente para no perder el impulso de transformación.`;
     } else {
-        interpretacion = `Se detecta una **fuga de energía** o bloqueo estructural. La combinación de tus códigos sugiere que el camino hacia ${b4.elem} está encontrando resistencia en la etapa de ${b3.elem}.`;
+        interpretacion = `Se detecta una **fuga de energía** o bloqueo estructural. La combinación de tus códigos sugiere que el camino hacia el resultado está encontrando resistencia interna.`;
     }
 
     lastResult = { module: testsData[currentModule].n, b1, b2, b3, b4, total };
@@ -215,7 +214,6 @@ function processResults() {
     `;
     renderChart(scores);
     showScreen('screen-results');
-}
 }
 
 function renderChart(sc) {
