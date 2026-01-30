@@ -184,19 +184,38 @@ function processResults() {
         const d = tablaMPM[bits];
         return { id:d[0], elem:d[1], val:d[2], msg:d[3] };
     };
-    const b1 = getB(0); const b2 = getB(4); const b3 = getB(8); const b4 = getB(12);
+
+    const b1 = getB(0);  // Situación
+    const b2 = getB(4);  // Movimiento
+    const b3 = getB(8);  // Transformación
+    const b4 = getB(12); // Resultado
+    
     const total = b1.val + b2.val + b3.val + b4.val;
+
+    // LÓGICA DE INTERPRETACIÓN AVANZADA (Simulación de IA)
+    let interpretacion = "";
+    if (total > 5) {
+        interpretacion = `Tu estado actual indica una **vibración expansiva**. La transición desde tu situación (${b1.elem}) hacia el resultado (${b4.elem}) sugiere que estás en un momento de máxima eficiencia.`;
+    } else if (total > 0) {
+        interpretacion = `Análisis equilibrado. Tu movimiento está alineado, pero la transición hacia ${b4.elem} requiere una atención consciente para no perder el impulso inicial.`;
+    } else {
+        interpretacion = `Se detecta una **fuga de energía** o bloqueo estructural. La combinación de tus códigos sugiere que el camino hacia ${b4.elem} está encontrando resistencia en la etapa de ${b3.elem}.`;
+    }
+
     lastResult = { module: testsData[currentModule].n, b1, b2, b3, b4, total };
     
     document.getElementById('text-results').innerHTML = `
-        <div style="text-align:left; font-size:0.9rem;">
-            <p><strong>Situación:</strong> <span class="tag ${b1.elem}">${b1.elem}</span> Cod ${b1.id} - ${b1.msg}</p>
-            <p><strong>Resultado:</strong> <span class="tag ${b4.elem}">${b4.elem}</span> Cod ${b4.id} - ${b4.msg}</p>
-            <h3 style="color:var(--accent)">Valor Total: ${total > 0 ? '+'+total : total}</h3>
+        <div style="text-align:left; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent);">
+            <p style="margin-top:0;"><strong><span class="tag ${b1.elem}">${b1.elem}</span> SITUACIÓN (Cód. ${b1.id}):</strong> ${b1.msg}</p>
+            <p><strong><span class="tag ${b4.elem}">${b4.elem}</span> RESULTADO (Cód. ${b4.id}):</strong> ${b4.msg}</p>
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+            <p style="font-style: italic; color: #cbd5e1;">" ${interpretacion} "</p>
+            <h3 style="color:var(--accent); text-align:center; margin-bottom:0;">Potencial Total: ${total > 0 ? '+'+total : total}</h3>
         </div>
     `;
     renderChart(scores);
     showScreen('screen-results');
+}
 }
 
 function renderChart(sc) {
@@ -242,3 +261,4 @@ init();
 </script>
 </body>
 </html>
+
