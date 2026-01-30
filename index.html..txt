@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPM • Manual Preemptive Movement</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a; --card: #1e293b; --primary: #FF2448;
+            --accent: #00C1FF; --whatsapp: #25D366;
+            --fuego: #ff5e37; --agua: #37b3ff; --tierra: #7ad65d; --aire: #dfe6e9;
+        }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: white; line-height: 1.6; overflow-x: hidden; }
+        .container { width: 95%; max-width: 550px; margin: auto; padding: 20px; }
+        .card {
+            background: var(--card); border-radius: 24px; padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4); margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        h1 { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin-bottom: 20px; color: var(--accent); }
+        .btn {
+            width: 100%; padding: 18px; border-radius: 14px; border: none;
+            font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s;
+            margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            text-decoration: none; color: inherit;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; text-align: left !important; }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); color: white; }
+        .hidden { display: none; }
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .slider-container { margin: 40px 0; text-align: center; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 10px; background: #334155; border-radius: 5px; }
+        input[type=range]::-webkit-slider-thumb {
+            height: 28px; width: 28px; border-radius: 50%; background: var(--accent);
+            cursor: pointer; -webkit-appearance: none; margin-top: -9px;
+            box-shadow: 0 0 15px rgba(0,193,255,0.4);
+        }
+        .val-display { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
+        .tag { padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; margin-right: 5px;}
+        .fuego { background: var(--fuego); color: white; }
+        .agua { background: var(--agua); color: white; }
+        .tierra { background: var(--tierra); color: white; }
+        .aire { background: var(--aire); color: black; }
+        input[type=text] {
+            width: 100%; padding: 15px; border-radius: 10px; background: #0f172a; 
+            border: 1px solid #334155; color: white; margin-bottom: 15px; box-sizing: border-box; font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="screen-home" class="card">
+        <div style="text-align:center;">
+            <div style="font-weight:900; color:var(--primary); font-size:1.2rem;">MPM</div>
+            <h1>Manual Preemptive Movement</h1>
+            <p>Anticípate al movimiento. Decodifica tu estado y optimiza tu estrategia.</p>
+            <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR DIAGNÓSTICO</button>
+        </div>
+    </div>
+
+    <div id="screen-menu" class="hidden">
+        <h2>Selecciona un Módulo</h2>
+        <div id="menu-list" class="menu-grid"></div>
+        <button class="btn btn-outline" style="margin-top:20px; text-align:center !important;" onclick="showScreen('screen-home')">Volver</button>
+    </div>
+
+    <div id="screen-test" class="hidden">
+        <div class="card">
+            <div id="test-progress" style="font-size:0.8rem; color:var(--accent); font-weight:bold; margin-bottom:10px;"></div>
+            <h3 id="question-text" style="min-height:60px; font-size:1.4rem;">-</h3>
+            <div class="slider-container">
+                <input type="range" id="main-slider" min="1" max="10" step="1" oninput="updateUIValue()">
+                <div class="val-display" id="display-value">5</div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-outline" style="text-align:center !important;" onclick="prevQ()">Atrás</button>
+                <button class="btn btn-primary" onclick="nextQ()">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-results" class="hidden">
+        <div class="card">
+            <h1>Diagnóstico MPM</h1>
+            <canvas id="mpmChart"></canvas>
+            <div id="text-results" style="margin:20px 0;"></div>
+            
+            <div style="background: rgba(0,193,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                <h3 style="margin-top:0;">Análisis Profundo</h3>
+                <p style="font-size:0.9rem;">Solicita tu sesión de consultoría personalizada.</p>
+                <input type="text" id="userName" placeholder="Escribe tu nombre">
+                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">ENVIAR A WHATSAPP</button>
+                <button class="btn btn-outline" style="text-align:center !important;" onclick="sendEmail()">ENVIAR POR EMAIL</button>
+            </div>
+            <button class="btn btn-outline" style="text-align:center !important;" onclick="resetApp()">NUEVA LECTURA</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const testsData = {
+    colores: { n:"🎨 Colores", q:["Rojo","Azul","Verde","Amarillo","Negro","Blanco","Morado","Naranja","Rosa","Gris","Turquesa","Marrón","Dorado","Plateado","Beige","Fucsia"]},
+    ciudades: { n:"🌆 Ciudades", q:["Tokio","París","Nueva York","Roma","Londres","Sídney","Ámsterdam","Seúl","Barcelona","Los Ángeles","Dubái","Berlín","Buenos Aires","Toronto","El Cairo","Madrid"]},
+    autos: { n:"🚗 Automóviles", q:["Ferrari","Toyota","Mercedes","Audi","Tesla","Ford","BMW","Chevrolet","Lamborghini","Honda","Porsche","Hyundai","Range Rover","Volkswagen","Peugeot","Citroën"]},
+    alimentos: { n:"🍽 Alimentos", q:["Chocolate","Manzana","Café","Pan","Carne","Pasta","Arroz","Queso","Pollo","Miel","Nueces","Salmón","Fresas","Aguacate","Huevos","Yogur"]},
+    profesiones: { n:"💼 Profesiones", q:["Médico","Artista","Ingeniero","Abogado","Maestro","Programador","Empresario","Psicólogo","Chef","Policía","Arquitecto","Deportista","Científico","Actor","Piloto","Escritor"]},
+    animales: { n:"🦁 Animales", q:["León","Lobo","Águila","Delfín","Tigre","Serpiente","Perro","Gato","Caballo","Búho","Tiburón","Oso","Cuervo","Conejo","Toro","Halcón"]},
+    estaciones: { n:"🍁 Estaciones", q:["Primavera","Verano","Otoño","Invierno","Amanecer","Atardecer","Mediodía","Medianoche","Clima tropical","Clima ártico","Clima templado","Clima desértico","Ambiente húmedo","Ambiente seco","Zona montañosa","Zona costera"]},
+    instrumentos: { n:"🎵 Instrumentos", q:["Piano","Guitarra","Violín","Flauta","Batería","Saxofón","Arpa","Trompeta","Bajo","Acordeón","Ukelele","Timbal","DJ Mixer","Voz humana","Órgano","Cello"]},
+    paises: { n:"🌍 Países", q:["Japón","Estados Unidos","Francia","España","Alemania","Italia","México","Brasil","Argentina","Canadá","Australia","Egipto","India","China","Rusia","Grecia"]},
+    metales: { n:"🔩 Metales", q:["Oro","Plata","Bronce","Cobre","Hierro","Plomo","Titanio","Mercurio","Acero","Latón","Platino","Wolframio","Níquel","Aluminio","Cobalto","Iridio"]},
+    paisajes: { n:"🏞 Paisajes", q:["Mar","Bosque","Montaña","Desierto","Cascada","Pradera","Jungla","Cueva","Glaciar","Cañón","Volcán","Llanura","Isla","Tundra","Sabana","Arrecife"]},
+    arquitectura: { n:"🏛 Arquitectura", q:["Minimalista","Barroco","Gótico","Románico","Brutalista","Art Deco","Clásico","Futurista","Industrial","Neoclásico","Orgánico","Colonial","High-Tech","Renacentista","Moderno","Posmoderno"]},
+    sabores: { n:"🍯 Sabores", q:["Dulce","Ácido","Amargo","Salado","Umami","Picante","Agridulce","Herbal","Tostado","Fresco","Cremoso","Fermentado","Marino","Ahumado","Frutal","Especiado"]},
+    tecnologias: { n:"📲 Tecnologías", q:["IA","Robótica","Web3","Cripto","Medicina","Bioingeniería","Big Data","Nano","VR","Satélites","EVs","IoT","Cloud","Fusión","Drones","Quantum"]},
+    epocas: { n:"⌛ Épocas", q:["Grecia","Roma","Edad Media","Renacimiento","Ilustración","Rev Industrial","Años 20","Años 50","Años 80","Actualidad","Futuro Cercano","Futuro Lejano","Barroco","Romanticismo","Modernismo","Transhumanismo"]},
+    arquetipos: { n:"🔱 Arquetipos", q:["Dragón","Fénix","Unicornio","Kraken","Pegaso","Minotauro","Sirena","Grifo","Quimera","Anubis","Thor","Medusa","Zeus","Hades","Ra","Odín"]}
+};
+
+const tablaMPM = {
+    "1111":[1,"fuego", 4,"Alta energía."], "0000":[2,"fuego",-3,"Energía contenida."],
+    "0110":[3,"agua", 4,"Emoción en expansión."], "1001":[4,"agua",-3,"Acumulación emocional."],
+    "1000":[5,"aire", 4,"Mente clara."], "0001":[6,"tierra",-3,"Falta estructura."],
+    "1110":[7,"tierra", 4,"Raíz sólida."], "0111":[8,"aire",-3,"Mucha mente activa."],
+    "1100":[9,"fuego", 2,"Impulso favorable."], "0011":[10,"fuego",-1,"Impulso inestable."],
+    "0100":[11,"agua", 2,"Sensibilidad útil."], "0010":[12,"tierra", 2,"Disciplina disponible."],
+    "1101":[13,"tierra",-1,"Cansancio."], "1011":[14,"agua",-1,"Emoción removida."],
+    "1010":[15,"aire", 2,"Creatividad activa."], "0101":[16,"aire",-1,"Exceso mental."]
+};
+
+let currentModule = ''; let currentIdx = 0; let scores = []; let lastResult = {}; let chartInstance = null;
+
+function showScreen(id) {
+    document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function init() {
+    const list = document.getElementById('menu-list');
+    list.innerHTML = ""; 
+    Object.keys(testsData).forEach(key => {
+        const b = document.createElement('button');
+        b.className = 'btn btn-outline';
+        b.innerHTML = `<span>${testsData[key].n}</span>`;
+        b.onclick = () => startTest(key);
+        list.appendChild(b);
+    });
+}
+
+function startTest(key) {
+    currentModule = key; currentIdx = 0; scores = Array(16).fill(5);
+    loadQuestion(); showScreen('screen-test');
+}
+
+function loadQuestion() {
+    document.getElementById('test-progress').innerText = `${testsData[currentModule].n} | ${currentIdx + 1}/16`;
+    document.getElementById('question-text').innerText = testsData[currentModule].q[currentIdx];
+    document.getElementById('main-slider').value = scores[currentIdx];
+    updateUIValue();
+}
+
+function updateUIValue() {
+    const val = document.getElementById('main-slider').value;
+    scores[currentIdx] = parseInt(val);
+    document.getElementById('display-value').innerText = val;
+}
+
+function nextQ() {
+    if(currentIdx < 15) { currentIdx++; loadQuestion(); }
+    else { processResults(); }
+}
+
+function prevQ() { if(currentIdx > 0) { currentIdx--; loadQuestion(); } }
+
+function processResults() {
+    const getB = (s) => {
+        const bits = scores.slice(s, s+4).map(v => v >= 5 ? "1" : "0").join("");
+        const d = tablaMPM[bits];
+        return { id:d[0], elem:d[1], val:d[2], msg:d[3] };
+    };
+    const b1 = getB(0); const b2 = getB(4); const b3 = getB(8); const b4 = getB(12);
+    const total = b1.val + b2.val + b3.val + b4.val;
+    lastResult = { module: testsData[currentModule].n, b1, b2, b3, b4, total };
+    
+    document.getElementById('text-results').innerHTML = `
+        <div style="text-align:left; font-size:0.9rem;">
+            <p><strong>Situación:</strong> <span class="tag ${b1.elem}">${b1.elem}</span> Cod ${b1.id} - ${b1.msg}</p>
+            <p><strong>Resultado:</strong> <span class="tag ${b4.elem}">${b4.elem}</span> Cod ${b4.id} - ${b4.msg}</p>
+            <h3 style="color:var(--accent)">Valor Total: ${total > 0 ? '+'+total : total}</h3>
+        </div>
+    `;
+    renderChart(scores);
+    showScreen('screen-results');
+}
+
+function renderChart(sc) {
+    const ctx = document.getElementById('mpmChart').getContext('2d');
+    const data = [
+        sc.slice(0,4).reduce((a,b)=>a+b)/4, sc.slice(4,8).reduce((a,b)=>a+b)/4,
+        sc.slice(8,12).reduce((a,b)=>a+b)/4, sc.slice(12,16).reduce((a,b)=>a+b)/4
+    ];
+    if(chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['SITUACIÓN', 'MOVIMIENTO', 'TRANSFORMACIÓN', 'RESULTADO'],
+            datasets: [{
+                data: data, backgroundColor: 'rgba(0, 193, 255, 0.2)', borderColor: '#00C1FF', pointBackgroundColor: '#FF2448', borderWidth: 2
+            }]
+        },
+        options: { 
+            scales: { r: { min: 0, max: 10, ticks: { display: false }, grid: { color: 'rgba(255,255,255,0.1)' } } }, 
+            plugins: { legend: { display: false } } 
+        }
+    });
+}
+
+function resetApp() {
+    if(chartInstance) { chartInstance.destroy(); chartInstance = null; }
+    showScreen('screen-menu');
+}
+
+function sendWhatsApp() {
+    const name = document.getElementById('userName').value || "Interesado";
+    const text = `Hola, soy ${name}. Resultado MPM *${lastResult.module}*: [S:${lastResult.b1.id}, M:${lastResult.b2.id}, T:${lastResult.b3.id}, R:${lastResult.b4.id}]. Total: ${lastResult.total}.`;
+    window.open(`https://wa.me/34672680535?text=${encodeURIComponent(text)}`);
+}
+
+function sendEmail() {
+    const name = document.getElementById('userName').value || "Interesado";
+    const body = `Nombre: ${name}\nMódulo: ${lastResult.module}\nCódigos: S:${lastResult.b1.id}, M:${lastResult.b2.id}, T:${lastResult.b3.id}, R:${lastResult.b4.id}\nTotal: ${lastResult.total}`;
+    window.location.href = `mailto:preemptivemovement@gmail.com?subject=Resultado MPM&body=${encodeURIComponent(body)}`;
+}
+
+init();
+</script>
+</body>
+</html>
