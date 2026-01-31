@@ -15,10 +15,11 @@
         .btn { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: inherit; margin-top: 10px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-whatsapp { background: var(--whatsapp); color: white; font-size: 1.1rem; }
-        .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; }
+        .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; text-align: center; }
         .hidden { display: none; }
         .tag { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
         .fuego { background: var(--fuego); color: white; } .agua { background: var(--agua); color: white; } .tierra { background: var(--tierra); color: white; } .aire { background: var(--aire); color: black; }
+        .binary-id { font-family: monospace; opacity: 0.4; font-size: 0.8rem; margin-left: 5px; }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { height: 10px; background: #334155; border-radius: 5px; }
         input[type=range]::-webkit-slider-thumb { height: 26px; width: 26px; border-radius: 50%; background: var(--accent); -webkit-appearance: none; margin-top: -8px; }
@@ -32,7 +33,7 @@
     <div id="screen-home" class="card">
         <img src="logo.png" alt="MPM" class="logo-img" onerror="this.style.display='none'">
         <h1>Preemptive Movement</h1>
-        <p style="text-align:center; color: #94a3b8;">Sistema de diagnóstico MPM. Identifica patrones invisibles y anticípate.</p>
+        <p style="text-align:center; color: #94a3b8;">Diagnóstico de precisión estratégica. Decodifica tu patrón actual.</p>
         <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR EVALUACIÓN</button>
     </div>
 
@@ -58,19 +59,19 @@
 
     <div id="screen-results" class="hidden">
         <div class="card">
-            <h1 style="color: var(--accent);">Resultados MPM</h1>
+            <h1 style="color: var(--accent);">Informe de Patrones</h1>
             <canvas id="mpmChart" style="margin: 20px 0;"></canvas>
             
             <div id="analysis-box" style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary);">
-                <div id="logic-text"></div>
+                <div id="logic-text" style="font-size: 0.9rem;"></div>
             </div>
 
             <div style="margin-top: 25px;">
-                <p style="text-align:center; font-weight:bold; color: var(--accent);">Para obtener el protocolo de acción completo:</p>
+                <p style="text-align:center; font-weight:bold; color: var(--accent);">¿Necesitas el protocolo de corrección?</p>
                 <input type="text" id="userName" placeholder="Tu nombre" style="width:100%; padding:15px; border-radius:10px; border:none; margin-bottom:10px; background: #0f172a; color:white; box-sizing: border-box;">
-                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">SOLICITAR ANÁLISIS EXPERTO</button>
+                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">SOLICITAR CONSULTORÍA</button>
             </div>
-            <button class="btn btn-outline" onclick="location.reload()">REINICIAR TEST</button>
+            <button class="btn btn-outline" onclick="resetApp()">REINICIAR ANALISIS</button>
         </div>
     </div>
 </div>
@@ -96,10 +97,10 @@ const testsData = {
 };
 
 const tablaMPM = {
-    "1111":[1,"fuego","ALTA ENERGÍA DINÁMICA"],"0000":[2,"fuego","BLOQUEO POR CONTENCIÓN"],"0110":[3,"agua","EXPANSIÓN EMOCIONAL"],"1001":[4,"agua","INVOLUCIÓN AFECTIVA"],"1000":[5,"aire","ENFOQUE ESTRATÉGICO"],"0001":[6,"tierra","DESESTRUCTURACIÓN"],"1110":[7,"tierra","SOLIDEZ OPERATIVA"],"0111":[8,"aire","DISPERSIÓN MENTAL"]
+    "1111":[1,"fuego","ALTA ENERGÍA"],"0000":[2,"fuego","CONTENCIÓN"],"0110":[3,"agua","EXPANSIÓN"],"1001":[4,"agua","INVOLUCIÓN"],"1000":[5,"aire","ENFOQUE"],"0001":[6,"tierra","INESTABILIDAD"],"1110":[7,"tierra","SOLIDEZ"],"0111":[8,"aire","DISPERSIÓN"],"1100":[9,"fuego","IMPULSO"],"0011":[10,"fuego","CAOS"],"0100":[11,"agua","SENSIBILIDAD"],"0010":[12,"tierra","DISCIPLINA"],"1101":[13,"tierra","DESGASTE"],"1011":[14,"agua","TURBULENCIA"],"1010":[15,"aire","CREATIVIDAD"],"0101":[16,"aire","ATURDIMIENTO"]
 };
 
-let currentModule = ''; let currentIdx = 0; let scores = []; let lastResult = {};
+let currentModule = ''; let currentIdx = 0; let scores = []; let lastResult = {}; let myChart = null;
 
 function showScreen(id) {
     document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
@@ -131,51 +132,76 @@ function updateUIValue() {
 
 function nextQ() {
     if(currentIdx < 15) { currentIdx++; loadQuestion(); }
-    else { generateLocalAnalysis(); }
+    else { generateFinalAnalysis(); }
 }
 
 function prevQ() { if(currentIdx > 0) { currentIdx--; loadQuestion(); } }
 
-function generateLocalAnalysis() {
+function generateFinalAnalysis() {
     showScreen('screen-results');
     const getB = (s) => {
-        const bits = scores.slice(s, s+4).map(v => v >= 5 ? "1" : "0").join("");
-        const d = tablaMPM[bits] || [9, "aire", "ESTADO NEUTRO"];
-        return { id:d[0], elem:d[1], msg:d[2] };
+        const chunk = scores.slice(s, s+4);
+        const bits = chunk.map(v => v >= 5 ? "1" : "0").join("");
+        const d = tablaMPM[bits] || [9, "aire", "NEUTRO"];
+        return { id:d[0], elem:d[1], msg:d[2], bit: bits.charAt(0) }; // bit es el indicador oculto
     };
 
-    const s = getB(0); const m = getB(4); const t = getB(8); const r = getB(12);
-    
-    // Lógica de Diferenciación de Texto (El Gancho)
-    let diag = "";
-    if (s.elem === 'fuego' && r.elem === 'agua') diag = "Tu impulso inicial (Fuego) se está 'extinguiendo' al llegar al resultado. Hay una fuga de energía en la fase de transformación.";
-    else if (s.elem === 'tierra' && r.elem === 'aire') diag = "Tienes una base sólida pero el resultado se dispersa. Falta cohesión en el movimiento táctico.";
-    else if (s.elem === r.elem) diag = "Patrón de redundancia detectado. Tu sistema replica la situación inicial en el resultado sin evolucionar. Estancamiento cíclico.";
-    else if (s.elem === 'agua' && r.elem === 'fuego') diag = "Conversión de alta intensidad. Estás transformando pasividad en acción, pero el coste energético es crítico.";
-    else diag = "Transición compleja detectada entre " + s.elem + " y " + r.elem + ". La arquitectura de tu movimiento muestra asimetrías tácticas.";
+    const S = getB(0); const M = getB(4); const T = getB(8); const R = getB(12);
+    lastResult = { S, M, T, R };
 
-    lastResult = { s, m, t, r };
+    // Matriz de Diversidad de Análisis
+    let diag = "";
+    const combo = S.elem + R.elem;
     
+    switch(combo) {
+        case 'fuegofuego': diag = "Tu motor interno está en bucle. Mucha iniciativa pero el resultado solo replica el inicio sin transformación real."; break;
+        case 'fuegoagua': diag = "Fuga energética crítica. Tu impulso se 'apaga' antes de llegar al objetivo. Revisa la fase de Transformación."; break;
+        case 'fueratierra': diag = "Base inestable. Estás intentando construir sobre ideas volátiles. Falta anclaje en el movimiento."; break;
+        case 'tierraaire': diag = "Exceso de rigidez que termina en dispersión. Tu estructura es demasiado pesada para el dinamismo actual."; break;
+        case 'aguaaire': diag = "Alta sensibilidad creativa pero con riesgo de desorientación. Tu intuición necesita un marco táctico."; break;
+        case 'tierrafuego': diag = "Potencial de materialización alto. Estás logrando que lo denso se convierta en energía activa."; break;
+        default: diag = "Se detecta una transición asimétrica. La relación entre tu Situación y el Resultado final muestra un patrón de resistencia moderada.";
+    }
+
     document.getElementById('logic-text').innerHTML = `
-        <p><strong>ESTADO INICIAL:</strong> <span class="tag ${s.elem}">${s.elem}</span></p>
-        <p><strong>TENDENCIA FINAL:</strong> <span class="tag ${r.elem}">${r.elem}</span></p>
-        <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
-        <p style="color: #cbd5e1; font-size: 1.05rem;">${diag}</p>
-        <p style="margin-top:10px; color: var(--accent); font-weight:bold;">Recomendación: Evaluar fase de MOVIMIENTO (M:${m.id}) y TRANSFORMACIÓN (T:${t.id}).</p>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+            <div><strong>S:</strong> <span class="tag ${S.elem}">${S.elem}</span> <span class="binary-id">${S.bit}</span></div>
+            <div><strong>M:</strong> <span class="tag ${M.elem}">${M.elem}</span> <span class="binary-id">${M.bit}</span></div>
+            <div><strong>T:</strong> <span class="tag ${T.elem}">${T.elem}</span> <span class="binary-id">${T.bit}</span></div>
+            <div><strong>R:</strong> <span class="tag ${R.elem}">${R.elem}</span> <span class="binary-id">${R.bit}</span></div>
+        </div>
+        <p style="border-top: 1px solid rgba(255,255,255,0.1); padding-top:10px; font-style: italic;">"${diag}"</p>
     `;
     renderChart(scores);
 }
 
 function renderChart(sc) {
     const ctx = document.getElementById('mpmChart').getContext('2d');
-    const data = [sc.slice(0,4).reduce((a,b)=>a+b)/4, sc.slice(4,8).reduce((a,b)=>a+b)/4, sc.slice(8,12).reduce((a,b)=>a+b)/4, sc.slice(12,16).reduce((a,b)=>a+b)/4];
-    new Chart(ctx, { type: 'radar', data: { labels: ['S', 'M', 'T', 'R'], datasets: [{ data, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF', pointBackgroundColor: '#FF2448', borderWidth: 3 }] }, options: { scales: { r: { min:0, max:10, ticks: { display:false }, grid: { color: 'rgba(255,255,255,0.1)' } } }, plugins: { legend: { display:false } } } });
+    const data = [
+        sc.slice(0,4).reduce((a,b)=>a+b)/4, sc.slice(4,8).reduce((a,b)=>a+b)/4,
+        sc.slice(8,12).reduce((a,b)=>a+b)/4, sc.slice(12,16).reduce((a,b)=>a+b)/4
+    ];
+    if(myChart) myChart.destroy();
+    myChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['SITUACIÓN', 'MOVIMIENTO', 'TRANSFORMACIÓN', 'RESULTADO'],
+            datasets: [{ data, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF', pointBackgroundColor: '#FF2448', borderWidth: 3 }]
+        },
+        options: { scales: { r: { min:0, max:10, ticks: { display:false }, grid: { color: 'rgba(255,255,255,0.1)' } } }, plugins: { legend: { display:false } } }
+    });
 }
 
 function sendWhatsApp() {
     const name = document.getElementById('userName').value || "Interesado";
-    const msg = `Hola, soy ${name}. He completado el test MPM en el módulo ${currentModule}. Mis códigos son S:${lastResult.s.id}, M:${lastResult.m.id}, T:${lastResult.t.id}, R:${lastResult.r.id}. Solicito mi informe detallado.`;
+    const msg = `Hola, soy ${name}. Diagnóstico MPM finalizado. Patrón: S:${lastResult.S.id}, M:${lastResult.M.id}, T:${lastResult.T.id}, R:${lastResult.R.id}. Solicito consultoría profesional.`;
     window.open(`https://wa.me/34672680535?text=${encodeURIComponent(msg)}`);
+}
+
+function resetApp() {
+    if(myChart) myChart.destroy();
+    myChart = null;
+    showScreen('screen-menu');
 }
 
 init();
