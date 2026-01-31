@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MPM • Diagnóstico de Precisión</title>
+    <title>MPM • Diagnóstico Estratégico</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -32,7 +32,7 @@
     <div id="screen-home" class="card">
         <img src="logo.png" alt="MPM" class="logo-img" onerror="this.style.display='none'">
         <h1>Preemptive Movement</h1>
-        <p style="text-align:center; color: #94a3b8;">Sistema avanzado de diagnóstico estratégico. Anticípate al movimiento.</p>
+        <p style="text-align:center; color: #94a3b8;">Sistema de diagnóstico MPM. Identifica patrones invisibles y anticípate.</p>
         <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR EVALUACIÓN</button>
     </div>
 
@@ -58,7 +58,7 @@
 
     <div id="screen-results" class="hidden">
         <div class="card">
-            <h1 style="color: var(--accent);">Diagnóstico MPM</h1>
+            <h1 style="color: var(--accent);">Resultados MPM</h1>
             <canvas id="mpmChart" style="margin: 20px 0;"></canvas>
             
             <div id="analysis-box" style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary);">
@@ -66,11 +66,11 @@
             </div>
 
             <div style="margin-top: 25px;">
-                <p style="text-align:center; font-weight:bold; color: var(--accent);">¿Quieres la interpretación completa de tus resultados?</p>
-                <input type="text" id="userName" placeholder="Escribe tu nombre" style="width:100%; padding:15px; border-radius:10px; border:none; margin-bottom:10px; background: #0f172a; color:white; box-sizing: border-box;">
-                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">SOLICITAR CONSULTORÍA</button>
+                <p style="text-align:center; font-weight:bold; color: var(--accent);">Para obtener el protocolo de acción completo:</p>
+                <input type="text" id="userName" placeholder="Tu nombre" style="width:100%; padding:15px; border-radius:10px; border:none; margin-bottom:10px; background: #0f172a; color:white; box-sizing: border-box;">
+                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">SOLICITAR ANÁLISIS EXPERTO</button>
             </div>
-            <button class="btn btn-outline" onclick="location.reload()">NUEVA LECTURA</button>
+            <button class="btn btn-outline" onclick="location.reload()">REINICIAR TEST</button>
         </div>
     </div>
 </div>
@@ -78,13 +78,25 @@
 <script>
 const testsData = {
     colores: { n:"🎨 Colores", q:["Rojo","Azul","Verde","Amarillo","Negro","Blanco","Morado","Naranja","Rosa","Gris","Turquesa","Marrón","Dorado","Plateado","Beige","Fucsia"]},
+    ciudades: { n:"🌆 Ciudades", q:["Tokio","París","Nueva York","Roma","Londres","Sídney","Ámsterdam","Seúl","Barcelona","Los Ángeles","Dubái","Berlín","Buenos Aires","Toronto","El Cairo","Madrid"]},
+    autos: { n:"🚗 Automóviles", q:["Ferrari","Toyota","Mercedes","Audi","Tesla","Ford","BMW","Chevrolet","Lamborghini","Honda","Porsche","Hyundai","Range Rover","Volkswagen","Peugeot","Citroën"]},
+    alimentos: { n:"🍽 Alimentos", q:["Chocolate","Manzana","Café","Pan","Carne","Pasta","Arroz","Queso","Pollo","Miel","Nueces","Salmón","Fresas","Aguacate","Huevos","Yogur"]},
     profesiones: { n:"💼 Profesiones", q:["Médico","Artista","Ingeniero","Abogado","Maestro","Programador","Empresario","Psicólogo","Chef","Policía","Arquitecto","Deportista","Científico","Actor","Piloto","Escritor"]},
-    arquitectura: { n:"🏛 Arquitectura", q:["Minimalista","Barroco","Gótico","Románico","Brutalista","Art Deco","Clásico","Futurista","Industrial","Neoclásico","Orgánico","Colonial","High-Tech","Renacentista","Moderno","Posmoderno"]}
-    // (Puedes añadir aquí los 16 módulos completos)
+    animales: { n:"🦁 Animales", q:["León","Lobo","Águila","Delfín","Tigre","Serpiente","Perro","Gato","Caballo","Búho","Tiburón","Oso","Cuervo","Conejo","Toro","Halcón"]},
+    estaciones: { n:"🍁 Estaciones", q:["Primavera","Verano","Otoño","Invierno","Amanecer","Atardecer","Mediodía","Medianoche","Clima tropical","Clima ártico","Clima templado","Clima desértico","Ambiente húmedo","Ambiente seco","Zona montañosa","Zona costera"]},
+    instrumentos: { n:"🎵 Instrumentos", q:["Piano","Guitarra","Violín","Flauta","Batería","Saxofón","Arpa","Trompeta","Bajo","Acordeón","Ukelele","Timbal","DJ Mixer","Voz humana","Órgano","Cello"]},
+    paises: { n:"🌍 Países", q:["Japón","Estados Unidos","Francia","España","Alemania","Italia","México","Brasil","Argentina","Canadá","Australia","Egipto","India","China","Rusia","Grecia"]},
+    metales: { n:"🔩 Metales", q:["Oro","Plata","Bronce","Cobre","Hierro","Plomo","Titanio","Mercurio","Acero","Latón","Platino","Wolframio","Níquel","Aluminio","Cobalto","Iridio"]},
+    paisajes: { n:"🏞 Paisajes", q:["Mar","Bosque","Montaña","Desierto","Cascada","Pradera","Jungla","Cueva","Glaciar","Cañón","Volcán","Llanura","Isla","Tundra","Sabana","Arrecife"]},
+    arquitectura: { n:"🏛 Arquitectura", q:["Minimalista","Barroco","Gótico","Románico","Brutalista","Art Deco","Clásico","Futurista","Industrial","Neoclásico","Orgánico","Colonial","High-Tech","Renacentista","Moderno","Posmoderno"]},
+    sabores: { n:"🍯 Sabores", q:["Dulce","Ácido","Amargo","Salado","Umami","Picante","Agridulce","Herbal","Tostado","Fresco","Cremoso","Fermentado","Marino","Ahumado","Frutal","Especiado"]},
+    tecnologias: { n:"📲 Tecnologías", q:["IA","Robótica","Web3","Cripto","Medicina","Bioingeniería","Big Data","Nano","VR","Satélites","EVs","IoT","Cloud","Fusión","Drones","Quantum"]},
+    epocas: { n:"⌛ Épocas", q:["Grecia","Roma","Edad Media","Renacimiento","Ilustración","Rev Industrial","Años 20","Años 50","Años 80","Actualidad","Futuro Cercano","Futuro Lejano","Barroco","Romanticismo","Modernismo","Transhumanismo"]},
+    arquetipos: { n:"🔱 Arquetipos", q:["Dragón","Fénix","Unicornio","Kraken","Pegaso","Minotauro","Sirena","Grifo","Quimera","Anubis","Thor","Medusa","Zeus","Hades","Ra","Odín"]}
 };
 
 const tablaMPM = {
-    "1111":[1,"fuego","ALTA ENERGÍA"],"0000":[2,"fuego","CONTENCIÓN"],"0110":[3,"agua","EXPANSIÓN EMOCIONAL"],"1001":[4,"agua","ACUMULACIÓN"],"1000":[5,"aire","ENFOQUE MENTAL"],"0001":[6,"tierra","INESTABILIDAD"],"1110":[7,"tierra","SOLIDEZ"],"0111":[8,"aire","DISPERSIÓN"]
+    "1111":[1,"fuego","ALTA ENERGÍA DINÁMICA"],"0000":[2,"fuego","BLOQUEO POR CONTENCIÓN"],"0110":[3,"agua","EXPANSIÓN EMOCIONAL"],"1001":[4,"agua","INVOLUCIÓN AFECTIVA"],"1000":[5,"aire","ENFOQUE ESTRATÉGICO"],"0001":[6,"tierra","DESESTRUCTURACIÓN"],"1110":[7,"tierra","SOLIDEZ OPERATIVA"],"0111":[8,"aire","DISPERSIÓN MENTAL"]
 };
 
 let currentModule = ''; let currentIdx = 0; let scores = []; let lastResult = {};
@@ -132,19 +144,24 @@ function generateLocalAnalysis() {
         return { id:d[0], elem:d[1], msg:d[2] };
     };
 
-    const s = getB(0); const r = getB(12);
-    let extra = "Tu patrón sugiere una transición crítica entre " + s.elem + " y " + r.elem + ". ";
+    const s = getB(0); const m = getB(4); const t = getB(8); const r = getB(12);
     
-    if(s.elem === r.elem) extra += "Hay una redundancia energética que puede causar estancamiento.";
-    else extra += "El cambio de polaridad indica un movimiento inminente que requiere supervisión.";
+    // Lógica de Diferenciación de Texto (El Gancho)
+    let diag = "";
+    if (s.elem === 'fuego' && r.elem === 'agua') diag = "Tu impulso inicial (Fuego) se está 'extinguiendo' al llegar al resultado. Hay una fuga de energía en la fase de transformación.";
+    else if (s.elem === 'tierra' && r.elem === 'aire') diag = "Tienes una base sólida pero el resultado se dispersa. Falta cohesión en el movimiento táctico.";
+    else if (s.elem === r.elem) diag = "Patrón de redundancia detectado. Tu sistema replica la situación inicial en el resultado sin evolucionar. Estancamiento cíclico.";
+    else if (s.elem === 'agua' && r.elem === 'fuego') diag = "Conversión de alta intensidad. Estás transformando pasividad en acción, pero el coste energético es crítico.";
+    else diag = "Transición compleja detectada entre " + s.elem + " y " + r.elem + ". La arquitectura de tu movimiento muestra asimetrías tácticas.";
 
-    lastResult = { s, r };
+    lastResult = { s, m, t, r };
     
     document.getElementById('logic-text').innerHTML = `
-        <p><strong>SITUACIÓN:</strong> <span class="tag ${s.elem}">${s.elem}</span> - ${s.msg}</p>
-        <p><strong>RESULTADO:</strong> <span class="tag ${r.elem}">${r.elem}</span> - ${r.msg}</p>
+        <p><strong>ESTADO INICIAL:</strong> <span class="tag ${s.elem}">${s.elem}</span></p>
+        <p><strong>TENDENCIA FINAL:</strong> <span class="tag ${r.elem}">${r.elem}</span></p>
         <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
-        <p style="font-style: italic; color: #cbd5e1;">"${extra}"</p>
+        <p style="color: #cbd5e1; font-size: 1.05rem;">${diag}</p>
+        <p style="margin-top:10px; color: var(--accent); font-weight:bold;">Recomendación: Evaluar fase de MOVIMIENTO (M:${m.id}) y TRANSFORMACIÓN (T:${t.id}).</p>
     `;
     renderChart(scores);
 }
@@ -152,12 +169,12 @@ function generateLocalAnalysis() {
 function renderChart(sc) {
     const ctx = document.getElementById('mpmChart').getContext('2d');
     const data = [sc.slice(0,4).reduce((a,b)=>a+b)/4, sc.slice(4,8).reduce((a,b)=>a+b)/4, sc.slice(8,12).reduce((a,b)=>a+b)/4, sc.slice(12,16).reduce((a,b)=>a+b)/4];
-    new Chart(ctx, { type: 'radar', data: { labels: ['S', 'M', 'T', 'R'], datasets: [{ data, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF', pointBackgroundColor: '#FF2448' }] }, options: { scales: { r: { min:0, max:10, ticks: { display:false }, grid: { color: 'rgba(255,255,255,0.1)' } } }, plugins: { legend: { display:false } } } });
+    new Chart(ctx, { type: 'radar', data: { labels: ['S', 'M', 'T', 'R'], datasets: [{ data, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF', pointBackgroundColor: '#FF2448', borderWidth: 3 }] }, options: { scales: { r: { min:0, max:10, ticks: { display:false }, grid: { color: 'rgba(255,255,255,0.1)' } } }, plugins: { legend: { display:false } } } });
 }
 
 function sendWhatsApp() {
     const name = document.getElementById('userName').value || "Interesado";
-    const msg = `Hola, soy ${name}. He realizado el test MPM. Mi Situación es ${lastResult.s.elem} y mi Resultado es ${lastResult.r.elem}. Solicito análisis profesional.`;
+    const msg = `Hola, soy ${name}. He completado el test MPM en el módulo ${currentModule}. Mis códigos son S:${lastResult.s.id}, M:${lastResult.m.id}, T:${lastResult.t.id}, R:${lastResult.r.id}. Solicito mi informe detallado.`;
     window.open(`https://wa.me/34672680535?text=${encodeURIComponent(msg)}`);
 }
 
