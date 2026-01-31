@@ -9,10 +9,10 @@
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --primary: #FF2448; --accent: #00C1FF; --whatsapp: #25D366; --fuego: #ff5e37; --agua: #37b3ff; --tierra: #7ad65d; --aire: #dfe6e9; }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: white; line-height: 1.6; }
-        .container { width: 95%; max-width: 500px; margin: auto; padding: 20px; }
-        .card { background: var(--card); border-radius: 24px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
+        .container { width: 95%; max-width: 500px; margin: auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; }
+        .card { background: var(--card); border-radius: 24px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; flex-grow: 1; }
         h1 { font-size: 1.7rem; font-weight: 900; text-align: center; margin-bottom: 5px; }
-        .btn { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: inherit; margin-top: 10px; }
+        .btn { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: inherit; margin-top: 10px; box-sizing: border-box; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-whatsapp { background: var(--whatsapp); color: white; font-size: 1.1rem; }
         .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; text-align: center; }
@@ -25,6 +25,11 @@
         input[type=range]::-webkit-slider-thumb { height: 26px; width: 26px; border-radius: 50%; background: var(--accent); -webkit-appearance: none; margin-top: -8px; }
         .val-display { font-size: 3.5rem; font-weight: 900; color: var(--accent); text-align: center; margin: 10px 0; }
         .logo-img { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: block; border: 2px solid var(--accent); }
+        
+        /* Nuevos Estilos Footer y Legal */
+        .footer-info { text-align: center; padding: 20px; font-size: 0.75rem; color: #64748b; margin-top: auto; }
+        .footer-info a { color: var(--accent); text-decoration: none; font-weight: bold; }
+        .legal-box { font-size: 0.65rem; color: #475569; text-align: justify; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; line-height: 1.3; }
     </style>
 </head>
 <body>
@@ -33,7 +38,7 @@
     <div id="screen-home" class="card">
         <img src="logo.png" alt="MPM" class="logo-img" onerror="this.style.display='none'">
         <h1>Preemptive Movement</h1>
-        <p style="text-align:center; color: #94a3b8;">Diagnóstico de precisión estratégica. Decodifica tu patrón actual.</p>
+        <p style="text-align:center; color: #94a3b8;">Manual Preemptive Movement. Sistema de diagnóstico estratégico para la anticipación de patrones.</p>
         <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR EVALUACIÓN</button>
     </div>
 
@@ -67,16 +72,28 @@
             </div>
 
             <div style="margin-top: 25px;">
-                <p style="text-align:center; font-weight:bold; color: var(--accent);">¿Necesitas el protocolo de corrección?</p>
+                <p style="text-align:center; font-weight:bold; color: var(--accent); margin-bottom:15px;">¿Necesitas el protocolo de corrección?</p>
                 <input type="text" id="userName" placeholder="Tu nombre" style="width:100%; padding:15px; border-radius:10px; border:none; margin-bottom:10px; background: #0f172a; color:white; box-sizing: border-box;">
                 <button class="btn btn-whatsapp" onclick="sendWhatsApp()">SOLICITAR CONSULTORÍA</button>
             </div>
-            <button class="btn btn-outline" onclick="resetApp()">REINICIAR ANALISIS</button>
+            
+            <button class="btn btn-outline" onclick="resetApp()">NUEVO ANÁLISIS</button>
+
+            <div class="legal-box">
+                <strong>AVISO LEGAL:</strong> Este diagnóstico es una herramienta de orientación basada en el método MPM. Los resultados son interpretaciones de patrones y no constituyen consejo médico, psicológico o financiero vinculante. El uso de esta aplicación implica la aceptación de que el consultor no se hace responsable de las decisiones tomadas tras la lectura. Para un análisis profesional, solicite una sesión privada.
+            </div>
         </div>
+    </div>
+
+    <div class="footer-info">
+        <p>Preemptive Movement © 2026 | Consultoría Estratégica</p>
+        <p>Contacto: <a href="mailto:preemptivemovement@gmail.com">preemptivemovement@gmail.com</a></p>
+        <p>Explora el método en: <a href="https://preemptivemovement.blogspot.com/" target="_blank">Nuestro Blog Oficial</a></p>
     </div>
 </div>
 
 <script>
+// Mantengo los 16 módulos originales
 const testsData = {
     colores: { n:"🎨 Colores", q:["Rojo","Azul","Verde","Amarillo","Negro","Blanco","Morado","Naranja","Rosa","Gris","Turquesa","Marrón","Dorado","Plateado","Beige","Fucsia"]},
     ciudades: { n:"🌆 Ciudades", q:["Tokio","París","Nueva York","Roma","Londres","Sídney","Ámsterdam","Seúl","Barcelona","Los Ángeles","Dubái","Berlín","Buenos Aires","Toronto","El Cairo","Madrid"]},
@@ -105,6 +122,7 @@ let currentModule = ''; let currentIdx = 0; let scores = []; let lastResult = {}
 function showScreen(id) {
     document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
+    window.scrollTo(0,0);
 }
 
 function init() {
@@ -143,24 +161,23 @@ function generateFinalAnalysis() {
         const chunk = scores.slice(s, s+4);
         const bits = chunk.map(v => v >= 5 ? "1" : "0").join("");
         const d = tablaMPM[bits] || [9, "aire", "NEUTRO"];
-        return { id:d[0], elem:d[1], msg:d[2], bit: bits.charAt(0) }; // bit es el indicador oculto
+        return { id:d[0], elem:d[1], msg:d[2], bit: bits.charAt(0) };
     };
 
     const S = getB(0); const M = getB(4); const T = getB(8); const R = getB(12);
     lastResult = { S, M, T, R };
 
-    // Matriz de Diversidad de Análisis
     let diag = "";
     const combo = S.elem + R.elem;
     
     switch(combo) {
-        case 'fuegofuego': diag = "Tu motor interno está en bucle. Mucha iniciativa pero el resultado solo replica el inicio sin transformación real."; break;
-        case 'fuegoagua': diag = "Fuga energética crítica. Tu impulso se 'apaga' antes de llegar al objetivo. Revisa la fase de Transformación."; break;
-        case 'fueratierra': diag = "Base inestable. Estás intentando construir sobre ideas volátiles. Falta anclaje en el movimiento."; break;
-        case 'tierraaire': diag = "Exceso de rigidez que termina en dispersión. Tu estructura es demasiado pesada para el dinamismo actual."; break;
-        case 'aguaaire': diag = "Alta sensibilidad creativa pero con riesgo de desorientación. Tu intuición necesita un marco táctico."; break;
-        case 'tierrafuego': diag = "Potencial de materialización alto. Estás logrando que lo denso se convierta en energía activa."; break;
-        default: diag = "Se detecta una transición asimétrica. La relación entre tu Situación y el Resultado final muestra un patrón de resistencia moderada.";
+        case 'fuegofuego': diag = "Tu motor interno está operando en redundancia. Proyectas energía pero el resultado replica el inicio sin una evolución táctica real."; break;
+        case 'fuegoagua': diag = "Fuga energética por polaridad. Tu impulso inicial se 'evapora' al contactar con el resultado. Se requiere ajuste en la fase de Transformación."; break;
+        case 'airetierra': diag = "Base inestable. Estás intentando materializar sobre ideas demasiado volátiles. Falta anclaje estructural en tu movimiento."; break;
+        case 'tierraaire': diag = "Exceso de rigidez estructural. El sistema es demasiado pesado para el dinamismo que buscas proyectar al final."; break;
+        case 'aguaaire': diag = "Alta sensibilidad con riesgo de dispersión. Tu intuición es correcta, pero el resultado carece de un marco de ejecución claro."; break;
+        case 'tierrafuego': diag = "Alta capacidad de materialización. Estás logrando transformar la solidez en movimiento dinámico y resultados activos."; break;
+        default: diag = "Se detecta una asimetría en la transición. El flujo entre tu Situación actual y el Resultado muestra un patrón de resistencia moderada.";
     }
 
     document.getElementById('logic-text').innerHTML = `
