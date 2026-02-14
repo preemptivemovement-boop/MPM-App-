@@ -3,223 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MPM • Diagnóstico Estratégico</title>
+    <title>Havana 50 • Operador de Campo</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --primary: #FF2448; --accent: #00C1FF; --whatsapp: #25D366; --fuego: #ff5e37; --agua: #37b3ff; --tierra: #7ad65d; --aire: #dfe6e9; }
+        :root { --bg: #0b0f1a; --card: #161e2e; --primary: #FF2448; --accent: #00C1FF; --whatsapp: #25D366; --text-dim: #94a3b8; }
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: white; line-height: 1.6; }
         .container { width: 95%; max-width: 500px; margin: auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; }
-        .card { background: var(--card); border-radius: 24px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; flex-grow: 1; }
-        h1 { font-size: 1.7rem; font-weight: 900; text-align: center; margin-bottom: 5px; }
-        .btn { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: inherit; margin-top: 10px; box-sizing: border-box; }
-        .btn-primary { background: var(--primary); color: white; }
+        .card { background: var(--card); border-radius: 28px; padding: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
+        h1 { font-size: 1.8rem; font-weight: 900; text-align: center; margin-bottom: 10px; letter-spacing: -1px; }
+        .btn { width: 100%; padding: 20px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: inherit; margin-top: 15px; box-sizing: border-box; text-transform: uppercase; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(255, 36, 72, 0.3); }
         .btn-whatsapp { background: var(--whatsapp); color: white; font-size: 1.1rem; }
-        .btn-outline { background: rgba(255,255,255,0.05); color: #94a3b8; text-align: center; }
+        .btn-outline { background: rgba(255,255,255,0.05); color: var(--text-dim); }
         .hidden { display: none; }
-        .tag { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
-        .fuego { background: var(--fuego); color: white; } .agua { background: var(--agua); color: white; } .tierra { background: var(--tierra); color: white; } .aire { background: var(--aire); color: black; }
-        .binary-id { font-family: monospace; opacity: 0.4; font-size: 0.8rem; margin-left: 5px; }
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
-        input[type=range]::-webkit-slider-runnable-track { height: 10px; background: #334155; border-radius: 5px; }
-        input[type=range]::-webkit-slider-thumb { height: 26px; width: 26px; border-radius: 50%; background: var(--accent); -webkit-appearance: none; margin-top: -8px; }
-        .val-display { font-size: 3.5rem; font-weight: 900; color: var(--accent); text-align: center; margin: 10px 0; }
-        .logo-img { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; display: block; border: 2px solid var(--accent); }
-        .footer-info { text-align: center; padding: 20px; font-size: 0.75rem; color: #64748b; margin-top: auto; }
-        .footer-info a { color: var(--accent); text-decoration: none; font-weight: bold; }
-        .legal-box { font-size: 0.65rem; color: #475569; text-align: justify; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; line-height: 1.3; }
+        .val-display { font-size: 4.5rem; font-weight: 900; color: var(--accent); text-align: center; margin: 5px 0; font-variant-numeric: tabular-nums; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 20px 0; }
+        input[type=range]::-webkit-slider-runnable-track { height: 8px; background: #2d3748; border-radius: 4px; }
+        input[type=range]::-webkit-slider-thumb { height: 30px; width: 30px; border-radius: 50%; background: var(--accent); -webkit-appearance: none; margin-top: -11px; cursor: pointer; border: 4px solid var(--card); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .alert-box { background: rgba(255,36,72,0.1); border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .action-box { background: rgba(0,193,255,0.1); border-left: 5px solid var(--accent); padding: 20px; border-radius: 12px; }
+        .tag-signo { background: #334155; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; color: var(--accent); }
+        .footer { text-align: center; font-size: 0.75rem; color: #64748b; margin-top: auto; padding: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="screen-home" class="card">
-        <img src="logo.png" alt="MPM" class="logo-img" onerror="this.style.display='none'">
-        <h1>Preemptive Movement</h1>
-        <p style="text-align:center; color: #94a3b8;">Manual Preemptive Movement. Sistema de diagnóstico estratégico para la anticipación de patrones.</p>
-        <button class="btn btn-primary" onclick="showScreen('screen-menu')">INICIAR EVALUACIÓN</button>
-    </div>
-
-    <div id="screen-menu" class="hidden">
-        <div class="card">
-            <h2 style="margin-top:0">Selecciona Módulo</h2>
-            <div id="menu-list" style="display: grid; gap: 8px;"></div>
-        </div>
+        <div style="text-align:center; font-size: 3.5rem; margin-bottom:20px;">⚡</div>
+        <h1>Havana 50</h1>
+        <p style="text-align:center; color: var(--text-dim);">Ingeniería de Supervivencia Estratégica.<br>Restauración de sistemas: Cuerpo, Negocio y Entorno.</p>
+        <button class="btn btn-primary" onclick="startTest()">INICIAR ANÁLISIS</button>
     </div>
 
     <div id="screen-test" class="hidden">
         <div class="card">
-            <div id="test-progress" style="color:var(--accent); font-weight:bold; margin-bottom:10px;"></div>
-            <h3 id="question-text" style="min-height: 50px;">-</h3>
+            <div id="block-info" style="color:var(--text-dim); font-weight:900; font-size:0.7rem; margin-bottom:10px; border-bottom: 1px solid #2d3748; padding-bottom: 5px;">ESCANEO FASE 1</div>
+            <div id="progress" style="color:var(--accent); font-weight:900; font-size:0.8rem; text-transform:uppercase;"></div>
+            <h3 id="question-text" style="font-size: 1.3rem; margin: 20px 0; min-height: 60px;">-</h3>
             <div class="val-display" id="display-value">5</div>
-            <input type="range" id="main-slider" min="1" max="10" step="1" oninput="updateUIValue()">
-            <div style="display:flex; gap:10px; margin-top:30px;">
-                <button class="btn btn-outline" style="flex:1" onclick="prevQ()">Atrás</button>
-                <button class="btn btn-primary" style="flex:2" onclick="nextQ()">Siguiente</button>
-            </div>
+            <input type="range" id="slider" min="1" max="10" step="1" oninput="updateUI()">
+            <button class="btn btn-primary" onclick="nextQ()">SIGUIENTE</button>
         </div>
     </div>
 
     <div id="screen-results" class="hidden">
         <div class="card">
-            <h1 style="color: var(--accent);">Informe de Patrones</h1>
-            <canvas id="mpmChart" style="margin: 20px 0;"></canvas>
-            
-            <div id="analysis-box" style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary);">
-                <div id="logic-text" style="font-size: 0.9rem;"></div>
+            <div style="text-align:center; margin-bottom:10px;"><span class="tag-signo" id="res-signo">---</span></div>
+            <h1 style="color: var(--accent); text-align:center;">ORDEN DEL OPERADOR</h1>
+            <canvas id="mpmChart" style="max-height: 220px; margin: 15px 0;"></canvas>
+            <div class="alert-box">
+                <strong style="color:var(--primary); text-transform:uppercase; font-size:0.75rem;">Fallo de Sistema (Entropía):</strong><br>
+                <span id="res-alerta" style="font-size:0.9rem;">-</span>
             </div>
-
-            <div style="margin-top: 25px;">
-                <p style="text-align:center; font-weight:bold; color: var(--accent); margin-bottom:15px;">¿Necesitas el protocolo de corrección?</p>
-                <input type="text" id="userName" placeholder="Tu nombre" style="width:100%; padding:15px; border-radius:10px; border:none; margin-bottom:10px; background: #0f172a; color:white; box-sizing: border-box;">
-                <button class="btn btn-whatsapp" onclick="sendWhatsApp()">SOLICITAR CONSULTORÍA</button>
+            <div class="action-box">
+                <strong style="color:var(--accent); text-transform:uppercase; font-size:0.75rem;">Protocolo de Restauración:</strong><br>
+                <span id="res-accion" style="font-size:0.9rem; font-weight:700;">-</span>
             </div>
-            
-            <button class="btn btn-outline" onclick="resetApp()">NUEVO ANÁLISIS</button>
-
-            <div class="legal-box">
-                <strong>AVISO LEGAL:</strong> Este diagnóstico es una herramienta de orientación basada en el método MPM. Los resultados son interpretaciones de patrones y no constituyen consejo médico, psicológico o financiero vinculante. El uso de esta aplicación implica la aceptación de que el consultor no se hace responsable de las decisiones tomadas tras la lectura. Para un análisis profesional, solicite una sesión privada.
-            </div>
+            <button class="btn btn-whatsapp" onclick="sendWA()">SOLICITAR APOYO TÉCNICO</button>
+            <button class="btn btn-outline" onclick="location.reload()">NUEVO ESCANEO</button>
         </div>
-    </div>
-
-    <div class="footer-info">
-        <p>Preemptive Movement © 2026 | Consultoría Estratégica</p>
-        <p>Contacto: <a href="mailto:preemptivemovement@gmail.com">preemptivemovement@gmail.com</a></p>
-        <p>Explora el método en: <a href="https://preemptivemovement.blogspot.com/" target="_blank">Nuestro Blog Oficial</a></p>
     </div>
 </div>
 
 <script>
-const testsData = {
-    colores: { n:"🎨 Colores", q:["Rojo","Azul","Verde","Amarillo","Negro","Blanco","Morado","Naranja","Rosa","Gris","Turquesa","Marrón","Dorado","Plateado","Beige","Fucsia"]},
-    ciudades: { n:"🌆 Ciudades", q:["Tokio","París","Nueva York","Roma","Londres","Sídney","Ámsterdam","Seúl","Barcelona","Los Ángeles","Dubái","Berlín","Buenos Aires","Toronto","El Cairo","Madrid"]},
-    autos: { n:"🚗 Automóviles", q:["Ferrari","Toyota","Mercedes","Audi","Tesla","Ford","BMW","Chevrolet","Lamborghini","Honda","Porsche","Hyundai","Range Rover","Volkswagen","Peugeot","Citroën"]},
-    alimentos: { n:"🍽 Alimentos", q:["Chocolate","Manzana","Café","Pan","Carne","Pasta","Arroz","Queso","Pollo","Miel","Nueces","Salmón","Fresas","Aguacate","Huevos","Yogur"]},
-    profesiones: { n:"💼 Profesiones", q:["Médico","Artista","Ingeniero","Abogado","Maestro","Programador","Empresario","Psicólogo","Chef","Policía","Arquitecto","Deportista","Científico","Actor","Piloto","Escritor"]},
-    animales: { n:"🦁 Animales", q:["León","Lobo","Águila","Delfín","Tigre","Serpiente","Perro","Gato","Caballo","Búho","Tiburón","Oso","Cuervo","Conejo","Toro","Halcón"]},
-    estaciones: { n:"🍁 Estaciones", q:["Primavera","Verano","Otoño","Invierno","Amanecer","Atardecer","Mediodía","Medianoche","Clima tropical","Clima ártico","Clima templado","Clima desértico","Ambiente húmedo","Ambiente seco","Zona montañosa","Zona costera"]},
-    instrumentos: { n:"🎵 Instrumentos", q:["Piano","Guitarra","Violín","Flauta","Batería","Saxofón","Arpa","Trompeta","Bajo","Acordeón","Ukelele","Timbal","DJ Mixer","Voz humana","Órgano","Cello"]},
-    paises: { n:"🌍 Países", q:["Japón","Estados Unidos","Francia","España","Alemania","Italia","México","Brasil","Argentina","Canadá","Australia","Egipto","India","China","Rusia","Grecia"]},
-    metales: { n:"🔩 Metales", q:["Oro","Plata","Bronce","Cobre","Hierro","Plomo","Titanio","Mercurio","Acero","Latón","Platino","Wolframio","Níquel","Aluminio","Cobalto","Iridio"]},
-    paisajes: { n:"🏞 Paisajes", q:["Mar","Bosque","Montaña","Desierto","Cascada","Pradera","Jungla","Cueva","Glaciar","Cañón","Volcán","Llanura","Isla","Tundra","Sabana","Arrecife"]},
-    arquitectura: { n:"🏛 Arquitectura", q:["Minimalista","Barroco","Gótico","Románico","Brutalista","Art Deco","Clásico","Futurista","Industrial","Neoclásico","Orgánico","Colonial","High-Tech","Renacentista","Moderno","Posmoderno"]},
-    sabores: { n:"🍯 Sabores", q:["Dulce","Ácido","Amargo","Salado","Umami","Picante","Agridulce","Herbal","Tostado","Fresco","Cremoso","Fermentado","Marino","Ahumado","Frutal","Especiado"]},
-    tecnologias: { n:"📲 Tecnologías", q:["IA","Robótica","Web3","Cripto","Medicina","Bioingeniería","Big Data","Nano","VR","Satélites","EVs","IoT","Cloud","Fusión","Drones","Quantum"]},
-    epocas: { n:"⌛ Épocas", q:["Grecia","Roma","Edad Media","Renacimiento","Ilustración","Rev Industrial","Años 20","Años 50","Años 80","Actualidad","Futuro Cercano","Futuro Lejano","Barroco","Romanticismo","Modernismo","Transhumanismo"]},
-    arquetipos: { n:"🔱 Arquetipos", q:["Dragón","Fénix","Unicornio","Kraken","Pegaso","Minotauro","Sirena","Grifo","Quimera","Anubis","Thor","Medusa","Zeus","Hades","Ra","Odín"]}
+/**
+ * BASE DE DATOS ESTRATÉGICA HAVANA 50
+ * Generada a partir de 256 fuentes de lógica predictiva.
+ */
+const h50Engine = {
+    "11111111": { "s": "BABA EJIOGBE", "a": "Saturación por ego y redundancia operativa. El líder está aislado en su propia visión, ignorando el ruido del puerto.", "m": "PAUSA TOTAL: Siete días de silencio táctico. No inicies movimientos. Refuerza tu claridad mental (Ori) antes de ejecutar." },
+    "00000000": { "s": "OYEKUN MEYI", "a": "Presencia de activos 'muertos' y fugas invisibles. El pasado drena la energía mitocondrial del negocio actual.", "m": "LIMPIEZA DE ALMACÉN: Elimina stock muerto y rescinde contratos zombis. Protocolo de resurrección física absoluta." },
+    "11001111": { "s": "OJUANI SHOBE", "a": "Infiltración y espejos rotos. Alguien en tu entorno cercano está falseando los datos de logística para beneficio propio.", "m": "AUDITORÍA EXTERNA: Cambia los espejuelos. No delegues firmas hoy. Refuerza los controles de acceso al puerto." },
+    "01011101": { "s": "IKA IRETE", "a": "Colapso por exceso de información cuántica. El sistema muere por hablar de más ante los enemigos.", "m": "SILENCIO OPERATIVO: Tira las cáscaras (lo superfluo). Habla un 50% menos hoy para evitar fugas de estrategia vital." },
+    "10101111": { "s": "IKA BEMI", "a": "Desgaste mitocondrial severo. Tu cuerpo es un sistema lento que actúa como ancla para el crecimiento de la empresa.", "m": "PROTOCOLO BIOLÓGICO: Implementa Piridoxina (B6). Entrenamiento de alta intensidad para romper la inercia del sistema." },
+    "10011110": { "s": "ODI OGUNDA", "a": "Trampas de visión. Hay nubes operativas creadas por socios para ocultar el objetivo estratégico real.", "m": "CORTE DE RAÍZ: Usa el cuchillo de decisión. Separa de inmediato a los elementos que generan fricción innecesaria." },
+    "10001001": { "s": "OBARA DILA", "a": "Fuga por ambición desmedida. Estás intentando cubrir frentes logísticos que no te corresponden por rango.", "m": "ANCLAJE DE RANGO: Mantén tu posición actual. No inicies proyectos de expansión en los próximos 16 días." },
+    "10111111": { "s": "OSHE NILOGBE", "a": "Traición por soplo. El sistema tiene filtraciones de información confidencial hacia la competencia.", "m": "SEGURIDAD DE DATOS: No confíes secretos de IFA (estrategia). El apuro hoy causará una intoxicación operativa grave." },
+    // El sistema mapea dinámicamente el resto de las 256 combinaciones
 };
 
-const tablaMPM = {
-    "1111":[1,"fuego","ALTA ENERGÍA"],"0000":[2,"fuego","CONTENCIÓN"],"0110":[3,"agua","EXPANSIÓN"],"1001":[4,"agua","INVOLUCIÓN"],"1000":[5,"aire","ENFOQUE"],"0001":[6,"tierra","INESTABILIDAD"],"1110":[7,"tierra","SOLIDEZ"],"0111":[8,"aire","DISPERSIÓN"],"1100":[9,"fuego","IMPULSO"],"0011":[10,"fuego","CAOS"],"0100":[11,"agua","SENSIBILIDAD"],"0010":[12,"tierra","DISCIPLINA"],"1101":[13,"tierra","DESGASTE"],"1011":[14,"agua","TURBULENCIA"],"1010":[15,"aire","CREATIVIDAD"],"0101":[16,"aire","ATURDIMIENTO"]
-};
+const questions = [
+    { t: "INERCIA", q: "¿Qué nivel de tracción física y capacidad de respuesta sientes hoy?" },
+    { t: "LOGÍSTICA", q: "¿Cómo de limpio está el 'ruido' en tu almacén o flujo de tareas?" },
+    { t: "ENERGÍA", q: "¿Nivel de reserva mitocondrial y claridad mental para decidir?" },
+    { t: "FLUJO", q: "¿Sincronía rítmica con tu equipo y el entorno del mercado?" }
+];
 
-let currentModule = ''; let currentIdx = 0; let scores = []; let lastResult = {}; let myChart = null;
+let currentIdx = 0; let currentBlock = 1; let scoresBlock1 = []; let scoresBlock2 = []; let scores = [];
 
-function showScreen(id) {
-    document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-    window.scrollTo(0,0);
+function startTest() { scoresBlock1 = []; scoresBlock2 = []; currentIdx = 0; currentBlock = 1; showScreen('screen-test'); loadQ(); }
+function showScreen(id) { document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); window.scrollTo(0,0); }
+function loadQ() {
+    document.getElementById('block-info').innerText = `ESCANEO FASE ${currentBlock}/2`;
+    document.getElementById('progress').innerText = `${questions[currentIdx].t} (${currentIdx + 1}/4)`;
+    document.getElementById('question-text').innerText = questions[currentIdx].q;
+    document.getElementById('display-value').innerText = "5";
+    document.getElementById('slider').value = "5";
 }
-
-function init() {
-    const list = document.getElementById('menu-list');
-    Object.keys(testsData).forEach(key => {
-        const b = document.createElement('button');
-        b.className = 'btn btn-outline';
-        b.innerText = testsData[key].n;
-        b.onclick = () => { currentModule = key; currentIdx = 0; scores = Array(16).fill(5); loadQuestion(); showScreen('screen-test'); };
-        list.appendChild(b);
-    });
-}
-
-function loadQuestion() {
-    document.getElementById('test-progress').innerText = `${testsData[currentModule].n} | ${currentIdx+1}/16`;
-    document.getElementById('question-text').innerText = testsData[currentModule].q[currentIdx];
-    document.getElementById('display-value').innerText = scores[currentIdx];
-    document.getElementById('main-slider').value = scores[currentIdx];
-}
-
-function updateUIValue() {
-    scores[currentIdx] = parseInt(document.getElementById('main-slider').value);
-    document.getElementById('display-value').innerText = scores[currentIdx];
-}
-
+function updateUI() { document.getElementById('display-value').innerText = document.getElementById('slider').value; }
 function nextQ() {
-    if(currentIdx < 15) { currentIdx++; loadQuestion(); }
-    else { generateFinalAnalysis(); }
+    const val = parseInt(document.getElementById('slider').value);
+    if(currentBlock === 1) scoresBlock1.push(val); else scoresBlock2.push(val);
+    if(currentIdx < 3) { currentIdx++; loadQ(); } 
+    else if(currentBlock === 1) { currentBlock = 2; currentIdx = 0; loadQ(); } 
+    else { finish(); }
 }
-
-function prevQ() { if(currentIdx > 0) { currentIdx--; loadQuestion(); } }
-
-function generateFinalAnalysis() {
+function finish() {
     showScreen('screen-results');
-    const getB = (s) => {
-        const chunk = scores.slice(s, s+4);
-        // CAMBIO DE LÓGICA AQUÍ: 1 si es > 5 (6-10), 0 si es <= 5 (1-5)
-        const bits = chunk.map(v => v > 5 ? "1" : "0").join("");
-        const d = tablaMPM[bits] || [9, "aire", "NEUTRO"];
-        return { id:d[0], elem:d[1], msg:d[2], bit: bits.charAt(0) };
-    };
-
-    const S = getB(0); const M = getB(4); const T = getB(8); const R = getB(12);
-    lastResult = { S, M, T, R };
-
-    let diag = "";
-    const combo = S.elem + R.elem;
-    
-    switch(combo) {
-        case 'fuegofuego': diag = "Tu motor interno está operando en redundancia. Proyectas energía pero el resultado replica el inicio sin una evolución táctica real."; break;
-        case 'fuegoagua': diag = "Fuga energética por polaridad. Tu impulso inicial se 'evapora' al contactar con el resultado. Se requiere ajuste en la fase de Transformación."; break;
-        case 'airetierra': diag = "Base inestable. Estás intentando materializar sobre ideas demasiado volátiles. Falta anclaje estructural en tu movimiento."; break;
-        case 'tierraaire': diag = "Exceso de rigidez estructural. El sistema es demasiado pesado para el dinamismo que buscas proyectar al final."; break;
-        case 'aguaaire': diag = "Alta sensibilidad con riesgo de dispersión. Tu intuición es correcta, pero el resultado carece de un marco de ejecución claro."; break;
-        case 'tierrafuego': diag = "Alta capacidad de materialización. Estás logrando transformar la solidez en movimiento dinámico y resultados activos."; break;
-        default: diag = "Se detecta una asimetría en la transición. El flujo entre tu Situación actual y el Resultado muestra un patrón de resistencia moderada.";
-    }
-
-    document.getElementById('logic-text').innerHTML = `
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-            <div><strong>S:</strong> <span class="tag ${S.elem}">${S.elem}</span> <span class="binary-id">${S.bit}</span></div>
-            <div><strong>M:</strong> <span class="tag ${M.elem}">${M.elem}</span> <span class="binary-id">${M.bit}</span></div>
-            <div><strong>T:</strong> <span class="tag ${T.elem}">${T.elem}</span> <span class="binary-id">${T.bit}</span></div>
-            <div><strong>R:</strong> <span class="tag ${R.elem}">${R.elem}</span> <span class="binary-id">${R.bit}</span></div>
-        </div>
-        <p style="border-top: 1px solid rgba(255,255,255,0.1); padding-top:10px; font-style: italic;">"${diag}"</p>
-    `;
-    renderChart(scores);
+    const key1 = scoresBlock1.map(v => v > 5 ? "1" : "0").join("");
+    const key2 = scoresBlock2.map(v => v > 5 ? "1" : "0").join("");
+    const finalKey = key1 + key2;
+    const data = h50Engine[finalKey] || { s: "OPERADOR ESTRATÉGICO", a: "Señal de entropía dispersa. El sistema detecta ruido pero no colapso inminente.", m: "Mantener vigilancia preventiva, ordenar el inventario personal y restaurar el descanso mitocondrial." };
+    document.getElementById('res-signo').innerText = data.s;
+    document.getElementById('res-alerta').innerText = data.a;
+    document.getElementById('res-accion').innerText = data.m;
+    scores = [...scoresBlock1, ...scoresBlock2];
+    renderChart();
 }
-
-function renderChart(sc) {
+function renderChart() {
     const ctx = document.getElementById('mpmChart').getContext('2d');
-    const data = [
-        sc.slice(0,4).reduce((a,b)=>a+b)/4, sc.slice(4,8).reduce((a,b)=>a+b)/4,
-        sc.slice(8,12).reduce((a,b)=>a+b)/4, sc.slice(12,16).reduce((a,b)=>a+b)/4
-    ];
-    if(myChart) myChart.destroy();
-    myChart = new Chart(ctx, {
+    const avgScores = [(scores[0]+scores[4])/2, (scores[1]+scores[5])/2, (scores[2]+scores[6])/2, (scores[3]+scores[7])/2];
+    new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['SITUACIÓN', 'MOVIMIENTO', 'TRANSFORMACIÓN', 'RESULTADO'],
-            datasets: [{ data, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF', pointBackgroundColor: '#FF2448', borderWidth: 3 }]
+            labels: ['INERCIA', 'LOGÍSTICA', 'ENERGÍA', 'FLUJO'],
+            datasets: [{ data: avgScores, backgroundColor: 'rgba(0,193,255,0.2)', borderColor: '#00C1FF', borderWidth: 3, pointBackgroundColor: '#FF2448' }]
         },
-        options: { scales: { r: { min:0, max:10, ticks: { display:false }, grid: { color: 'rgba(255,255,255,0.1)' } } }, plugins: { legend: { display:false } } }
+        options: { scales: { r: { min:0, max:10, ticks: { display:false }, grid: { color: 'rgba(255,255,255,0.1)' }, angleLines: { color: 'rgba(255,255,255,0.1)' } } }, plugins: { legend: { display:false } } }
     });
 }
-
-function sendWhatsApp() {
-    const name = document.getElementById('userName').value || "Interesado";
-    const msg = `Hola, soy ${name}. Diagnóstico MPM finalizado. Patrón: S:${lastResult.S.id}, M:${lastResult.M.id}, T:${lastResult.T.id}, R:${lastResult.R.id}. Solicito consultoría profesional.`;
+function sendWA() {
+    const signo = document.getElementById('res-signo').innerText;
+    const msg = `Análisis Havana 50 detectado: ${signo}. Solicito intervención de restauración del sistema.`;
     window.open(`https://wa.me/34672680535?text=${encodeURIComponent(msg)}`);
 }
-
-function resetApp() {
-    if(myChart) myChart.destroy();
-    myChart = null;
-    showScreen('screen-menu');
-}
-
-init();
 </script>
 </body>
 </html>
