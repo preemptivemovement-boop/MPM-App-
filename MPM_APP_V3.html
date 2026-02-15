@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MPM APP V3 — Preemptive Movement</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    text-align:center;
+    color:white;
+    background:#1A1A1A;
+    transition:0.6s;
+}
+h1{font-size:26px;margin-top:24px;font-weight:900;}
+p{font-size:16px;line-height:1.5;margin:10px 0;}
+.hidden{display:none;}
+
+button{
+    width:88%;
+    max-width:480px;
+    font-size:18px;
+    padding:14px 0;
+    margin:15px auto 0 auto;
+    border:none;
+    border-radius:10px;
+    background:#FF2448;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    display:block;
+}
+button:hover{opacity:.95;}
+
+.panel{
+    width:90%;max-width:520px;margin:4vh auto;
+    background:#222; padding:20px;border-radius:12px;
+}
+
+/* MENÚ DE TESTS */
+.menu-btn{
+    background:#333;
+    font-size:17px;
+    margin-top:10px;
+}
+
+/* TEST */
+.test-card{
+    width:90%;max-width:520px;margin:4vh auto;
+    background:#222;padding:22px;border-radius:12px;
+}
+.test-title{font-size:20px;margin-bottom:10px;font-weight:bold;}
+.label{font-size:19px;margin:20px 0 8px;font-weight:bold;}
+input[type=range]{width:100%;height:32px;}
+.range-val{font-size:22px;margin-top:5px;font-weight:bold;color:#FFDB6E;}
+
+.nav-btn{
+    background:#00C1FF;
+    font-size:20px;
+    margin-top:20px;
+}
+.back-btn{
+    background:#666;
+    font-size:16px;
+    margin-top:10px;
+}
+
+/* RESULTADO */
+.result-box{
+    width:90%;max-width:520px;margin:4vh auto;
+    background:#111;padding:22px;border-radius:12px;
+    text-align:left;font-size:17px;
+}
+.tag{
+    padding:3px 9px;border-radius:8px;
+    color:#000;font-weight:bold;font-size:14px;
+}
+.fuego{background:#ff5e37;}
+.agua{background:#37b3ff;}
+.tierra{background:#7ad65d;}
+.aire{background:#dfe6e9;}
+
+.footer{
+    font-size:13px;margin:18px 0;opacity:.85;
+}
+
+/* CAMPOS ENVÍO */
+input[type=text], input[type=email]{
+    width:88%;
+    max-width:520px;
+    padding:10px;
+    margin:6px auto;
+    border-radius:8px;
+    border:none;
+    font-size:15px;
+    display:block;
+}
+
+/* TEMAS DINÁMICOS */
+.theme-fuego  {background:linear-gradient(135deg,#FF3D00,#FF7043);}
+.theme-agua   {background:linear-gradient(135deg,#0277BD,#26C6DA);}
+.theme-tierra {background:linear-gradient(135deg,#4E642C,#9CCC65);}
+.theme-aire   {background:linear-gradient(135deg,#90A4AE,#ECEFF1);}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <h1>MPM • Manual Preemptive Movement</h1>
+  <p>Todo lo que desees emprender puede analizarse preventivamente.<br>
+     La anticipación es poder.</p>
+  <button onclick="go('about')">ENTRAR</button>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="hidden">
+  <h1>¿Qué es MPM?</h1>
+  <div class="panel">
+    <p><b>MPM — Manual Preemptive Movement</b></p>
+    <p>Sistema de análisis, decodificación y lectura estratégica personal y empresarial.</p>
+    <p>Los test son solo la puerta de entrada.</p>
+    <p>
+      Además del diagnóstico vibracional mediante 16 módulos,
+      MPM incluye investigación profunda a través de:
+    </p>
+    <ul style="text-align:left;font-size:15px;line-height:1.4;margin:10px 0 0 18px;">
+      <li>Mapas cognitivos aplicados</li>
+      <li>Shadowing y observación en entorno real</li>
+      <li>Procesos de motivación personal y empresarial</li>
+      <li>Lectura de cultura y dirección organizacional</li>
+      <li>Análisis de patrones, bloqueos y potencial evolutivo</li>
+    </ul>
+    <p style="margin-top:10px;">
+      No solo interpretamos datos, los transformamos en acción.
+    </p>
+    <hr style="margin:14px 0;border-color:#444;">
+    <p style="font-size:13px;opacity:.9;">
+      Uso recomendado para mayores de 18 años. Los test ofrecen una lectura de estado
+      y tendencia actual. El crecimiento real ocurre con análisis profundo y
+      acompañamiento personalizado.
+    </p>
+  </div>
+  <button onclick="go('menu')">SELECCIONAR TEST</button>
+</div>
+
+<!-- MENÚ 16 TESTS -->
+<div id="menu" class="hidden">
+  <h1>Selecciona un Test MPM</h1>
+  <div class="panel">
+    <p style="font-size:14px;">
+      Cada test son 16 preguntas. Responde del 1 al 10 según tu afinidad actual.
+    </p>
+  </div>
+
+  <button class="menu-btn" onclick="startTest('colores')">🎨 Colores — Emoción</button>
+  <button class="menu-btn" onclick="startTest('ciudades')">🌆 Ciudades — Expansión social</button>
+  <button class="menu-btn" onclick="startTest('autos')">🚗 Automóviles — Ambición y ritmo</button>
+  <button class="menu-btn" onclick="startTest('alimentos')">🍽 Alimentos — Instinto y placer</button>
+  <button class="menu-btn" onclick="startTest('profesiones')">💼 Profesiones — Vocación</button>
+  <button class="menu-btn" onclick="startTest('animales')">🦁 Animales — Fuerza instintiva</button>
+  <button class="menu-btn" onclick="startTest('estaciones')">🍁 Estaciones — Ritmo vital</button>
+  <button class="menu-btn" onclick="startTest('instrumentos')">🎵 Instrumentos — Creatividad</button>
+  <button class="menu-btn" onclick="startTest('paises')">🌍 Países — Visión global</button>
+  <button class="menu-btn" onclick="startTest('metales')">🔩 Metales — Fortaleza interna</button>
+  <button class="menu-btn" onclick="startTest('paisajes')">🏞 Paisajes — Terreno emocional</button>
+  <button class="menu-btn" onclick="startTest('arquitectura')">🏛 Arquitectura — Orden mental</button>
+  <button class="menu-btn" onclick="startTest('sabores')">🍯 Sabores — Recompensa emocional</button>
+  <button class="menu-btn" onclick="startTest('tecnologias')">📲 Tecnologías — Adaptación futura</button>
+  <button class="menu-btn" onclick="startTest('epocas')">⌛ Épocas históricas — Tiempo interno</button>
+  <button class="menu-btn" onclick="startTest('arquetipos')">🔱 Arquetipos — Inconsciente simbólico</button>
+
+  <p class="footer">
+    Para análisis profesional y procesos profundos personales o empresariales:<br>
+    <b>preemptivemovement@gmail.com</b>
+  </p>
+</div>
+
+<!-- TEST -->
+<div id="test" class="hidden">
+  <div class="test-card">
+    <div class="test-title" id="testName"></div>
+    <p style="font-size:14px;margin-bottom:10px;">
+      Responde del 1 al 10 según tu afinidad o preferencia actual.
+    </p>
+    <div class="label" id="pregunta"></div>
+    <input id="slider" type="range" min="1" max="10" value="5" oninput="updateVal()">
+    <div class="range-val" id="valor">5</div>
+
+    <button class="nav-btn" onclick="next()">Siguiente ▶</button>
+    <button class="back-btn" onclick="prev()">◀ Atrás</button>
+  </div>
+</div>
+
+<!-- RESULTADO -->
+<div id="result" class="hidden">
+  <h1>Resultado MPM</h1>
+  <div id="resultado" class="result-box"></div>
+
+  <div class="panel" style="margin-top:15px;">
+    <p style="font-size:15px;">
+      Todo estado es transitorio. Una energía positiva puede sostenerse o perderse;
+      una energía tensa puede transformarse.<br><br>
+      Este resultado es una lectura de momento. La verdadera profundidad aparece
+      cuando se trabaja con análisis más amplio, mapas cognitivos, shadowing
+      y procesos de motivación aplicada.
+    </p>
+  </div>
+
+  <div class="panel">
+    <p style="font-size:15px;">¿Quieres que analice personalmente este resultado?</p>
+    <input type="text" id="userName" placeholder="Tu nombre (obligatorio)">
+    <input type="email" id="userEmail" placeholder="Tu correo (opcional)">
+    <button onclick="sendEmail()">Enviar resultado para análisis personalizado</button>
+    <p class="footer">
+      Se abrirá tu correo con el resultado preparado.<br>
+      Solo tendrás que pulsar “Enviar”.
+    </p>
+  </div>
+
+  <button onclick="location.reload()">NUEVA LECTURA</button>
+</div>
+
+<script>
+// ========================= DATOS DE TESTS =========================
+const tests = {
+  colores:["Rojo","Azul","Verde","Amarillo","Negro","Blanco","Morado","Naranja",
+           "Rosa","Gris","Turquesa","Marrón","Dorado","Plateado","Beige","Fucsia"],
+
+  ciudades:["Tokio","París","Nueva York","Roma","Londres","Sídney","Ámsterdam","Seúl",
+            "Barcelona","Los Ángeles","Dubái","Berlín","Buenos Aires","Toronto","El Cairo","Madrid"],
+
+  autos:["Ferrari","Toyota","Mercedes","Audi","Tesla","Ford","BMW","Chevrolet",
+         "Lamborghini","Honda","Porsche","Hyundai","Range Rover","Volkswagen","Peugeot","Citroën"],
+
+  alimentos:["Chocolate","Manzana","Café","Pan","Carne","Pasta","Arroz","Queso",
+             "Pollo","Miel","Nueces","Salmón","Fresas","Aguacate","Huevos","Yogur"],
+
+  profesiones:["Médico","Artista","Ingeniero","Abogado","Maestro","Programador","Empresario","Psicólogo",
+               "Chef","Policía","Arquitecto","Deportista","Científico","Actor","Piloto","Escritor"],
+
+  animales:["León","Lobo","Águila","Delfín","Tigre","Serpiente","Perro","Gato",
+            "Caballo","Búho","Tiburón","Oso","Cuervo","Conejo","Toro","Halcón"],
+
+  estaciones:["Primavera","Verano","Otoño","Invierno","Amanecer","Atardecer","Mediodía","Medianoche",
+              "Clima tropical","Clima ártico","Clima templado","Clima desértico",
+              "Ambiente húmedo","Ambiente seco","Zona montañosa","Zona costera"],
+
+  instrumentos:["Piano","Guitarra","Violín","Flauta","Batería","Saxofón","Arpa","Trompeta",
+                "Bajo","Acordeón","Ukelele","Timbal","DJ Mixer","Voz humana","Órgano","Cello"],
+
+  paises:["Japón","Estados Unidos","Francia","España","Alemania","Italia","México","Brasil",
+          "Argentina","Canadá","Australia","Egipto","India","China","Rusia","Grecia"],
+
+  metales:["Oro","Plata","Bronce","Cobre","Hierro","Plomo","Titanio","Mercurio",
+           "Acero","Latón","Platino","Wolframio","Níquel","Aluminio","Cobalto","Iridio"],
+
+  paisajes:["Mar","Bosque","Montaña","Desierto","Cascada","Pradera","Jungla","Cueva",
+            "Glaciar","Cañón","Volcán","Llanura","Isla","Tundra","Sabana","Arrecife"],
+
+  arquitectura:["Minimalista","Barroco","Gótico","Románico","Brutalista","Art Deco","Clásico","Futurista",
+                "Industrial","Neoclásico","Orgánico","Colonial","High-Tech","Renacentista","Moderno","Posmoderno"],
+
+  sabores:["Dulce","Ácido","Amargo","Salado","Umami","Picante","Agridulce","Herbal",
+           "Tostado","Fresco","Cremoso","Fermentado","Marino","Ahumado","Frutal","Especiado"],
+
+  tecnologias:["Inteligencia Artificial","Robótica","Web3","Criptomonedas","Medicina avanzada","Bioingeniería",
+               "Big Data","Nanotecnología","Realidad Virtual","Satélites","Automoción eléctrica","IoT",
+               "Cloud","Energía nuclear","Drones","Computación cuántica"],
+
+  epocas:["Antigua Grecia","Roma Imperial","Edad Media","Renacimiento","Ilustración","Revolución Industrial",
+          "Años 20","Años 50","Años 80","Actualidad","Futuro cercano","Futuro lejano",
+          "Barroco","Romanticismo","Modernismo","Transhumanismo"],
+
+  arquetipos:["Dragón","Fénix","Unicornio","Kraken","Pegaso","Minotauro","Sirena","Grifo",
+              "Quimera","Anubis","Thor","Medusa","Zeus","Hades","Ra","Odín"]
+};
+
+// ========================= ESTADO GLOBAL =========================
+let tipo = "";
+let index = 0;
+let resps = [];
+let lastResult = null;
+
+// ========================= NAVEGACIÓN =========================
+function go(id){
+  ["home","about","menu","test","result"].forEach(s=>{
+    document.getElementById(s).classList.add("hidden");
+  });
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function startTest(t){
+  tipo = t;
+  index = 0;
+  resps = Array(16).fill(5);
+  document.body.className = "";
+  document.getElementById("testName").innerText = "Test • " + nombreTest(t);
+  loadQ();
+  go("test");
+}
+
+function nombreTest(t){
+  const map = {
+    colores:"Colores — Emoción",
+    ciudades:"Ciudades — Expansión social",
+    autos:"Automóviles — Ambición y ritmo",
+    alimentos:"Alimentos — Instinto y placer",
+    profesiones:"Profesiones — Vocación",
+    animales:"Animales — Fuerza instintiva",
+    estaciones:"Estaciones — Ritmo vital",
+    instrumentos:"Instrumentos — Creatividad",
+    paises:"Países — Visión global",
+    metales:"Metales — Fortaleza interna",
+    paisajes:"Paisajes — Terreno emocional",
+    arquitectura:"Arquitectura — Orden mental",
+    sabores:"Sabores — Recompensa emocional",
+    tecnologias:"Tecnologías — Adaptación futura",
+    epocas:"Épocas históricas — Tiempo interno",
+    arquetipos:"Arquetipos — Inconsciente simbólico"
+  };
+  return map[t] || t;
+}
+
+// ========================= TEST =========================
+function loadQ(){
+  const q = tests[tipo][index];
+  document.getElementById("pregunta").innerText = (index+1) + ". " + q;
+  document.getElementById("slider").value = resps[index];
+  document.getElementById("valor").innerText = resps[index];
+}
+function updateVal(){
+  resps[index] = Number(document.getElementById("slider").value);
+  document.getElementById("valor").innerText = resps[index];
+}
+
+function next(){
+  if(index < 15){ index++; loadQ(); }
+  else{ calcular(); }
+}
+function prev(){
+  if(index > 0){ index--; loadQ(); }
+}
+
+// ========================= TABLA MPM (mensajes base neutros) =========================
+const tabla = {
+ "1111":[1,"fuego", 4,"Energía alta disponible, es buen momento para moverte."],
+ "0000":[2,"fuego",-3,"Energía contenida; conviene encender motivación y acción."],
+ "0110":[3,"agua", 4,"Emoción en expansión; escucha lo que sientes."],
+ "1001":[4,"agua",-3,"Acumulación emocional; liberar y expresar ayuda."],
+ "1000":[5,"aire", 4,"Mente clara e ideas listas para avanzar."],
+ "0001":[6,"tierra",-3,"Falta estructura; ordenar tu base te fortalecerá."],
+ "1110":[7,"tierra", 4,"Raíz sólida; buen punto para construir a largo plazo."],
+ "0111":[8,"aire",-3,"Mucha mente activa; enfocar evita dispersión."],
+ "1100":[9,"fuego", 2,"Impulso favorable; avanza con pasos concretos."],
+ "0011":[10,"fuego",-1,"Impulso inestable; conviene revisar antes de actuar."],
+ "0100":[11,"agua", 2,"Sensibilidad útil para relaciones y decisiones humanas."],
+ "0010":[12,"tierra", 2,"Disciplina y constancia están disponibles para ti."],
+ "1101":[13,"tierra",-1,"Puede haber cansancio; cuidar el cuerpo y ritmo es clave."],
+ "1011":[14,"agua",-1,"Emoción removida; observar sin juicio ayuda a integrar."],
+ "1010":[15,"aire", 2,"Creatividad mental activa; buen momento para diseñar cambios."],
+ "0101":[16,"aire",-1,"Exceso mental; bajar al cuerpo y a lo concreto equilibra."
+ ]
+};
+
+// ========================= CÁLCULO DE BLOQUE CON MATIZ =========================
+function calcBlock(start){
+  const vals = resps.slice(start,start+4);
+  const bitsArr = vals.map(v=>v>=6?1:0);   // UMBRAL SUBIDO A 6
+  const bits = bitsArr.join("");
+  const d = tabla[bits] || ["-","aire",0,"Lectura neutra."];
+
+  const avg = vals.reduce((a,b)=>a+b,0)/vals.length;
+
+  let matiz = "";
+
+  const allOn  = bitsArr.every(b=>b===1);
+  const allOff = bitsArr.every(b=>b===0);
+
+  if(allOn){
+    if(avg >= 8.5)      matiz = " de forma muy marcada; conviene canalizar bien esta intensidad.";
+    else if(avg >= 7.0) matiz = " de forma clara, con fuerza suficiente para sostener cambios.";
+    else                matiz = " pero todavía en fase suave o inicial, con margen para crecer.";
+  }else if(allOff){
+    if(avg <= 2.5)      matiz = " de manera intensa; conviene prestar especial atención a este área.";
+    else if(avg <= 4.0) matiz = " de manera moderada, con margen de ajuste si se actúa a tiempo.";
+    else                matiz = " de forma ligera, más como advertencia que como bloqueo real.";
+  }else{
+    if(avg >= 7.5)      matiz = " con mezcla de señales pero predominio intenso de la tendencia.";
+    else if(avg <= 4.5) matiz = " con mezcla de señales y cierta contención que frena el impulso.";
+    else                matiz = " con matiz intermedio; hay margen de maniobra y ajuste.";
+  }
+
+  let baseMsg = d[3];
+  if(matiz){
+    baseMsg = baseMsg.replace(/\.$/,"") + matiz;
+  }
+
+  return {id:d[0], elem:d[1], valor:d[2], msg:baseMsg, bits, avg};
+}
+
+// ========================= CÁLCULO Y PRONÓSTICO =========================
+function calcular(){
+  const B1 = calcBlock(0);
+  const B2 = calcBlock(4);
+  const B3 = calcBlock(8);
+  const B4 = calcBlock(12);
+
+  const total = B1.valor + B2.valor + B3.valor + B4.valor;
+
+  const count = {fuego:0,agua:0,aire:0,tierra:0};
+  [B1,B2,B3,B4].forEach(b=>count[b.elem]++);
+  const dom = Object.keys(count).reduce((a,b)=>count[a]>=count[b]?a:b);
+
+  document.body.className = "theme-"+dom;
+
+  const pronostico = generarPronostico(total, dom);
+
+  const niceElem = e => e.charAt(0).toUpperCase()+e.slice(1);
+
+  const html = `
+  <b>Módulo evaluado:</b> ${nombreTest(tipo)}<br><br>
+  <b>Situación:</b> Código ${B1.id} <span class="tag ${B1.elem}">${niceElem(B1.elem)}</span> — ${B1.msg}<br><br>
+  <b>Movimiento:</b> Código ${B2.id} <span class="tag ${B2.elem}">${niceElem(B2.elem)}</span> — ${B2.msg}<br><br>
+  <b>Transformación:</b> Código ${B3.id} <span class="tag ${B3.elem}">${niceElem(B3.elem)}</span> — ${B3.msg}<br><br>
+  <b>Resultado:</b> Código ${B4.id} <span class="tag ${B4.elem}">${niceElem(B4.elem)}</span> — ${B4.msg}<br><br>
+  <b>Valor total:</b> ${total>0? "+"+total: total}<br>
+  <b>Elemento dominante:</b> ${niceElem(dom)}<br><br>
+  <b>Pronóstico MPM:</b><br>
+  <span style="font-size:15px;">${pronostico}</span>
+  `;
+
+  document.getElementById("resultado").innerHTML = html;
+
+  lastResult = {
+    tipo: tipo,
+    nombreModulo: nombreTest(tipo),
+    B1,B2,B3,B4,
+    total, dom, pronostico
+  };
+
+  go("result");
+}
+
+function generarPronostico(total, dom){
+  let base = "";
+  if(total >= 8){
+    base = "La energía actual es claramente favorable. Si mantienes enfoque y coherencia, puedes aprovechar una ventana de crecimiento muy positiva.";
+  }else if(total >= 3){
+    base = "La energía es moderadamente favorable. Hay elementos a favor, pero requieren continuidad y pequeñas correcciones para sostenerlos.";
+  }else if(total >= -2){
+    base = "La energía está en transición. No es ni claramente positiva ni claramente tensa; es un buen momento para ajustar dirección antes de decidir cosas importantes.";
+  }else if(total >= -6){
+    base = "La lectura muestra cierta tensión o dispersión. No es una condena, sino una invitación a revisar decisiones, ritmos y prioridades.";
+  }else{
+    base = "La energía se percibe densa o frenada. Esto suele indicar acumulación de temas no resueltos que pueden transformarse con ajustes conscientes.";
+  }
+
+  const extraMap = {
+    fuego:"El fuego dominante señala acción, impulso y necesidad de mover ficha, pero siempre con consciencia para no quemar etapas.",
+    agua:"El agua dominante indica profundidad emocional y sensibilidad. Bien usada, es intuición; sin orden, puede volverse confusión.",
+    tierra:"La tierra dominante habla de estructura, cuerpo, rutina y materia. Es momento de cuidar bases, hábitos y recursos.",
+    aire:"El aire dominante refleja mucha mente, ideas y análisis. Puede abrir caminos, siempre que se concrete en pasos reales."
+  };
+
+  return base + " " + (extraMap[dom] || "");
+}
+
+// ========================= ENVÍO POR EMAIL =========================
+function sendEmail(){
+  if(!lastResult){
+    alert("Primero realiza un test y obtén un resultado.");
+    return;
+  }
+  const name = document.getElementById("userName").value.trim();
+  const email = document.getElementById("userEmail").value.trim();
+
+  if(!name){
+    alert("Por favor, escribe al menos tu nombre.");
+    return;
+  }
+
+  const r = lastResult;
+  const line = (b, etiqueta) =>
+    `${etiqueta}: Código ${b.id} (${b.elem}) - ${b.msg}`;
+
+  const body =
+`Nombre: ${name}
+Correo de contacto: ${email || "no indicado"}
+
+Módulo evaluado: ${r.nombreModulo}
+
+${line(r.B1,"Situación")}
+${line(r.B2,"Movimiento")}
+${line(r.B3,"Transformación")}
+${line(r.B4,"Resultado")}
+
+Valor total MPM: ${r.total>0? "+"+r.total : r.total}
+Elemento dominante: ${r.dom.toUpperCase()}
+
+Pronóstico MPM:
+${r.pronostico}
+
+Por favor, realiza un análisis profundo y personalizado de este resultado aplicándolo a mi caso (personal, empresarial o ambos).`;
+
+  const subject = `Nuevo resultado MPM — ${name}`;
+  const mailto = `mailto:preemptivemovement@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+}
+</script>
+
+</body>
+</html>
